@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web.config;
+package com.x.bp.web.config;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSONObject;
@@ -8,8 +8,8 @@ import com.x.bp.common.exception.CommonBizException;
 import com.x.bp.common.model.LoginUserTO;
 import com.x.bp.common.enums.EnumError;
 import com.x.bp.core.service.user.TokenService;
-import com.sifubuy.wms.web.annotion.Callback;
-import com.sifubuy.wms.web.annotion.LoginNotRequired;
+import com.x.bp.web.annotion.Callback;
+import com.x.bp.web.annotion.LoginNotRequired;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;

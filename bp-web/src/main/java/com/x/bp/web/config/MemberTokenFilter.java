@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web.config;
+package com.x.bp.web.config;
 
 
 import org.springframework.stereotype.Component;

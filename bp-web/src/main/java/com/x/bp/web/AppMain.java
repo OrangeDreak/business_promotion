@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web;
+package com.x.bp.web;
 
 import cn.hutool.extra.spring.EnableSpringUtil;
 import lombok.extern.slf4j.Slf4j;

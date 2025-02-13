@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web.base;
+package com.x.bp.web.base;
 
 import com.x.bp.common.exception.CommonBizException;
 import com.x.bp.core.common.Result;

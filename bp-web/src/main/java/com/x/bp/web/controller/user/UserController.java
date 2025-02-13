@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web.controller.user;
+package com.x.bp.web.controller.user;
 
 import com.x.bp.core.service.user.UserService;
 import io.swagger.annotations.Api;

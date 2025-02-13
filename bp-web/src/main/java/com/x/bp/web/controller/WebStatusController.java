@@ -1,4 +1,4 @@
-package com.sifubuy.wms.web.controller;
+package com.x.bp.web.controller;
 
 import com.x.bp.core.common.Result;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package com.sifubuy.wms.web.controller.admin;
+package com.x.bp.web.controller.admin;
 
-import com.sifubuy.wms.web.annotion.LoginNotRequired;
+import com.x.bp.web.annotion.LoginNotRequired;
 import com.x.bp.common.enums.UserTypeEnum;
 import com.x.bp.core.common.Result;
 import com.x.bp.core.dto.user.UserLoginReq;
