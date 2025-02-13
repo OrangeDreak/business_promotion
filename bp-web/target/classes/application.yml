@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: wms
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 5000MB
+  profiles:
+    active: dev
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+
+server:
+  servlet:
+    context-path: /wms

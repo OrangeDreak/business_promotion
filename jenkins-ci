@@ -1,0 +1,78 @@
+#!groovy
+@Library('jenkinslib') _
+
+def mytool = new ops.jk.tools()
+def app = new ops.jk.appDetail()
+def projectName = app.getProjectName()
+def namespace = app.getNameSpace()
+
+pipeline {
+    environment {
+        NAMESPACE = app.getNameSpace()                  //online
+        PROJECTNAMESPACE = app.getprojectNamespace()    //website
+        CI_PROJECT_NAME = app.getProjectName()          //wenche
+        IMG_TAG = app.getImgTag()                       //tag
+    }
+
+    options {
+        timestamps()
+        timeout(time: 20, unit: 'MINUTES')
+    }
+
+    agent { 
+        docker {
+            image 'registry.cn-hongkong.aliyuncs.com/hzqingrui/maven:3.6-docker-git-docker-v1.0.1'
+            registryUrl 'https://registry.cn-hongkong.aliyuncs.com'
+            registryCredentialsId 'dockerimages'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /home/admin/:/root/'
+        } 
+    }
+
+    stages {
+        stage('mvnPackage') {
+            when { expression { return ! params.ROLLTAG } }
+            steps {
+                script {
+                    app.mvnPackage()
+                }
+            }
+        }
+
+        stage('dockerBuild') {
+            steps {
+                script {
+                    app.dockerBuild()
+                }
+            }
+        }
+
+        stage('publish') {
+            steps {
+                script {
+                    app.publish()
+                }
+            }
+        }
+    }
+
+    post {
+ //       cleanup {
+ //           dir("${workspace}@tmp") {
+ //               deleteDir()
+ //           }
+ //           dir("${workspace}") {
+ //               deleteDir()
+ //           }
+ //       }
+        success {
+            script{
+                mytool.emailSuccess()
+            }
+        }
+        failure {
+            script{
+                mytool.emailFailure()
+            }
+        }
+    }
+}

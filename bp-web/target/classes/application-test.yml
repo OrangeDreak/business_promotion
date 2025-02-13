@@ -1,0 +1,104 @@
+#数据源配置 spring.elasticjob.zookeeper
+env: test
+server:
+  port: 8080
+  servlet:
+    context-path: /wms
+spring:
+  application:
+    name: wms
+  #邮箱配置
+  mail:
+    host: smtp.qiye.aliyun.com
+    port: 465
+    username: no-reply@sifubuy.com
+    password: xportcn@0730
+    personal: Sifubuy
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 5000MB
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  redis:
+    ##redis 单机环境配置
+    host: redisdev-Internet.littouch.com
+    port: 6380
+    password: qingruiHangZhouPasswd
+    database: 0
+    ssl: false
+    ##redis 集群环境配置
+    #cluster:
+    #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+    #  commandTimeout: 5000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rdsdev-Internet.littouch.com:3308/wms?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    username: root
+    password: Hzqingrui654com
+
+# 系统设置
+system:
+  # 新建用户默认密码
+  defaultPassword: 123456
+
+#mybatis:
+#  mapper-locations: classpath:/mappers/*.xml
+#  type-aliases-package: com.sifubuy.wms.dao.po
+
+# mybatis
+mybatis-plus:
+  mapper-locations: mapper-locations:classpath:org/springblade/**/mapper/*Mapper.xml,classpath:mapper/*.xml,classpath:mappers/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.sifubuy.wms.dao.po
+  typeEnumsPackage: org.springblade.dashboard.entity.enums
+  global-config:
+    # 关闭MP3.0自带的banner
+    banner: false
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"不操作", 2:"用户输入ID",3:"数字型snowflake", 4:"全局唯一ID UUID", 5:"字符串型snowflake";
+      id-type: assign_id
+      #字段策略
+      insert-strategy: not_null
+      update-strategy: not_null
+      where-strategy: not_null
+      #驼峰下划线转换
+      table-underline: true
+      # 逻辑删除配置
+      # 逻辑删除全局值（1表示已删除，这也是Mybatis Plus的默认配置）
+      logic-delete-value: 1
+      # 逻辑未删除全局值（0表示未删除，这也是Mybatis Plus的默认配置）
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+
+#oss配置
+oss:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  access-key: LTAI5tEkqEZn342tsxLamrwF
+  secret-key: VIlgrT9D890uNTRrFaj5bOHf4v32Nl
+  bucket-name: pandapon-buy-dev
+
+
+logging:
+  config: classpath:log/logback.xml
+
+business:
+  delivery:
+    freezeDays: 45
+    expireDays: 60
+
+
+
+#redis队列开关
+redis:
+  queue:
+    enable: true
+    listener:
+      queue_key: wms-test-common
+
+callback:
+  host:
+    sf: localhost:8080

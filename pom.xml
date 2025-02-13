@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.x.bp</groupId>
+    <artifactId>bp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>bp-api</module>
+        <module>bp-dao</module>
+        <module>bp-core</module>
+        <module>bp-web</module>
+        <module>bp-manage</module>
+        <module>bp-common</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.3.RELEASE</version>
+    </parent>
+
+    <properties>
+        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
+        <java.version>8</java.version>
+        <lombok.version>1.18.24</lombok.version>
+        <mysql-connector.version>8.0.29</mysql-connector.version>
+        <mybatis.version>3.5.10</mybatis.version>
+        <hutool.version>5.8.18</hutool.version>
+        <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
+        <guava.version>29.0-jre</guava.version>
+        <cglib.version>3.3.0</cglib.version>
+        <device.version>1.1.5.RELEASE</device.version>
+        <jjwt.version>0.9.0</jjwt.version>
+        <spring-jwt.version>1.1.1.RELEASE</spring-jwt.version>
+        <pagehelper.version>5.1.11</pagehelper.version>
+        <pagehelper-starter.version>1.2.13</pagehelper-starter.version>
+        <tk.mybatis.version>2.1.5</tk.mybatis.version>
+        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <knife4j.version>2.0.4</knife4j.version>
+        <redisson.version>3.13.0</redisson.version>
+        <seata.version>1.3.0</seata.version>
+        <elasticjob.version>3.0.0-alpha</elasticjob.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <oss.version>3.16.1</oss.version>
+        <alibaba.fastjson.version>1.2.83</alibaba.fastjson.version>
+        <easy-excel.version>3.3.2</easy-excel.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.x.bp</groupId>
+                <artifactId>bp-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.x.bp</groupId>
+                <artifactId>bp-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.x.bp</groupId>
+                <artifactId>bp-manage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.x.bp</groupId>
+                <artifactId>bp-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.x.bp</groupId>
+                <artifactId>bp-dao</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--Mysql-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <!-- MyBatis-->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+                <!-- tools -->
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>${guava.version}</version>
+                </dependency>
+
+
+               <!-- <dependency>
+                    <groupId>tk.mybatis</groupId>
+                    <artifactId>mapper-spring-boot-starter</artifactId>
+                    <version>${tk.mybatis.version}</version>
+                </dependency>-->
+
+                <!-- redisson -->
+                <dependency>
+                    <groupId>org.redisson</groupId>
+                    <artifactId>redisson-spring-boot-starter</artifactId>
+                    <version>${redisson.version}</version>
+                </dependency>
+
+                <!-- job -->
+                <dependency>
+                    <groupId>org.apache.shardingsphere.elasticjob</groupId>
+                    <artifactId>elasticjob-lite-core</artifactId>
+                    <version>${elasticjob.version}</version>
+                </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>4.5.13</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.stripe</groupId>
+                <artifactId>stripe-java</artifactId>
+                <version>27.1.1</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>http://nexus.xportcn.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://nexus.xportcn.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+</project>
