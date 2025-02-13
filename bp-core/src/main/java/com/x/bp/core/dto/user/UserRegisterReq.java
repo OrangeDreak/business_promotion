@@ -15,17 +15,23 @@ import java.io.Serializable;
  */
 @Data
 public class UserRegisterReq implements Serializable {
+
     /**
-     * 国家/地区
+     * 姓
      */
-    @NotNull(message = "国家/地区不能为空")
     @ApiModelProperty(required = true)
-    private Long areaId;
+    private String firstName;
+
+    /**
+     * 名
+     */
+    @ApiModelProperty(required = true)
+    private String lastName;
 
     /**
      * 邮箱
      */
-    @NotBlank(message = "邮箱不能为空")
+    @NotBlank(message = "Email cannot be empty")
     @ApiModelProperty(required = true)
     @Email
     private String email;
@@ -33,35 +39,9 @@ public class UserRegisterReq implements Serializable {
     /**
      * 密码
      */
-    @NotBlank(message = "密码不能为空")
+    @NotBlank(message = "Password cannot be empty")
     @ApiModelProperty(required = true)
     private String password;
-
-    /**
-     * 邀请码
-     */
-    private String inviteCode;
-
-    /**
-     * 邮箱验证码
-     */
-    @NotBlank(message = "邮箱验证码不能为空")
-    @ApiModelProperty(required = true)
-    private String emailCaptcha;
-
-    /**
-     * 图形验证码key
-     */
-    @NotBlank(message = "图形验证码key不能为空")
-    @ApiModelProperty(required = true)
-    private String captchaKey;
-
-    /**
-     * 图形验证码
-     */
-    @NotBlank(message = "图形验证码不能为空")
-    @ApiModelProperty(required = true)
-    private String captchaCode;
 
 
 }

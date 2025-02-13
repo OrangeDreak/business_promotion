@@ -4,6 +4,7 @@ import com.sifubuy.wms.web.annotion.LoginNotRequired;
 import com.x.bp.common.enums.UserTypeEnum;
 import com.x.bp.core.common.Result;
 import com.x.bp.core.dto.user.UserLoginReq;
+import com.x.bp.core.dto.user.UserRegisterReq;
 import com.x.bp.core.service.user.UserLoginService;
 import com.x.bp.core.vo.user.UserLoginVO;
 import io.swagger.annotations.Api;
@@ -34,6 +35,18 @@ public class AppLoginController {
     @LoginNotRequired
     public Result<UserLoginVO> login(@RequestBody @Validated UserLoginReq req) {
         String token = userLoginService.login(req.getLoginName(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
+        UserLoginVO userLoginVO = new UserLoginVO();
+        userLoginVO.setToken(token);
+        return Result.buildSuccess(userLoginVO);
+    }
+
+    @ApiOperation("登录")
+    @PostMapping("/register")
+    @LoginNotRequired
+    public Result<UserLoginVO> register(@RequestBody @Validated UserRegisterReq req) {
+        userLoginService.register(req, UserTypeEnum.CUSTOMER.getType());
+        //注册成功直接登录
+        String token = userLoginService.login(req.getEmail(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
         UserLoginVO userLoginVO = new UserLoginVO();
         userLoginVO.setToken(token);
         return Result.buildSuccess(userLoginVO);

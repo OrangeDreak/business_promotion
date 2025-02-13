@@ -43,4 +43,13 @@ public class UserService {
         }
         return userMapper.getUserByLoginName(loginName, userType);
     }
+
+    public void updateById(UserDO userDO) {
+        userDO.setGmtModified(null);
+        userMapper.updateById(userDO);
+    }
+
+    public void addUser(UserDO userDO) {
+        userMapper.insert(userDO);
+    }
 }
