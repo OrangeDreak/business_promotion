@@ -3,7 +3,7 @@ env: prod
 server:
   port: 8080
   servlet:
-    context-path: /wms
+    context-path: /bp
 spring:
   application:
     name: wms
@@ -31,9 +31,9 @@ spring:
     #  commandTimeout: 5000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wms?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
+    url: jdbc:mysql://rm-t4nw3281hopn4065b.mysql.singapore.rds.aliyuncs.com:3306/bp-prod?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    username: bpproduser
+    password: bpproduser123@
 
 # 系统设置
 system:

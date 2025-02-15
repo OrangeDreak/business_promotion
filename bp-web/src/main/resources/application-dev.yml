@@ -2,7 +2,7 @@
 env: dev
 server:
   servlet:
-    context-path: /wms
+    context-path: /bp
   port: 8080
 spring:
   application:
