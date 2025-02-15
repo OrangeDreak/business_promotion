@@ -3,7 +3,7 @@ env: dev
 server:
   servlet:
     context-path: /bp
-  port: 8080
+  port: 8081
 spring:
   application:
     name: wms
@@ -48,9 +48,8 @@ system:
 
 # mybatis
 mybatis-plus:
-  mapper-locations: mapper-locations:classpath:org/springblade/**/mapper/*Mapper.xml,classpath:mapper/*.xml,classpath:mappers/*.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.sifubuy.wms.dao.po
+  typeAliasesPackage: com.x.bp.dao.po
   typeEnumsPackage: org.springblade.dashboard.entity.enums
   global-config:
     # 关闭MP3.0自带的banner

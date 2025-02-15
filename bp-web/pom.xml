@@ -39,19 +39,7 @@
 
     </dependencies>
     <build>
-        <finalName>x.bp</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
-
+        <finalName>app</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>

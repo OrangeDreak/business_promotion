@@ -1,6 +1,6 @@
 spring:
   application:
-    name: wms
+    name: bp
   servlet:
     multipart:
       max-file-size: 100MB
@@ -12,4 +12,4 @@ spring:
 
 server:
   servlet:
-    context-path: /wms
+    context-path: /bp
