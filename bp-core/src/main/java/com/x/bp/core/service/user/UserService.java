@@ -1,7 +1,7 @@
 package com.x.bp.core.service.user;
 
 import com.x.bp.common.enums.UserTypeEnum;
-import com.x.bp.core.common.Result;
+import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.core.vo.user.UserVO;
 import com.x.bp.dao.mapper.UserMapper;
 import com.x.bp.dao.po.UserDO;
@@ -26,11 +26,11 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
-    public Result<UserVO> getUserInfo(Long userId) {
+    public ServiceResultTO<UserVO> getUserInfo(Long userId) {
         UserDO userDO = getById(userId);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(userDO, userVO);
-        return Result.buildSuccess(userVO);
+        return ServiceResultTO.buildSuccess(userVO);
     }
 
     public UserDO getById(Long id) {
