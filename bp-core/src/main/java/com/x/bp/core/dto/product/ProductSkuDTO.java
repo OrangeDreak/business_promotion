@@ -2,6 +2,8 @@ package com.x.bp.core.dto.product;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductSkuDTO {
     private Long id;
@@ -34,5 +36,5 @@ public class ProductSkuDTO {
     /**
      * 价格
      */
-    private Integer price;
+    private BigDecimal price;
 }
