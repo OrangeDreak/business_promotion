@@ -61,8 +61,8 @@ CREATE TABLE `bp_platform` (
 DROP TABLE IF EXISTS `bp_product`;
 CREATE TABLE `bp_product` (
                             `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-                            `title` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
-                            `title_en` varchar(64) NOT NULL DEFAULT '' COMMENT '标题en',
+                            `title` varchar(128) NOT NULL DEFAULT '' COMMENT '标题',
+                            `title_en` varchar(128) NOT NULL DEFAULT '' COMMENT '标题en',
                             `image` varchar(256) NOT NULL DEFAULT '' COMMENT '图片',
                             `desc` varchar(256) NOT NULL DEFAULT '' COMMENT '描述',
                             `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1上架；0下架',
@@ -72,7 +72,8 @@ CREATE TABLE `bp_product` (
                             `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
                             `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                             `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                            PRIMARY KEY (`id`) USING BTREE
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `idx_platform` (`platform`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
 
 DROP TABLE IF EXISTS `bp_product_sku`;
@@ -90,7 +91,66 @@ CREATE TABLE `bp_product_sku` (
                             `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
                             `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                             `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                            PRIMARY KEY (`id`) USING BTREE
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `idx_product_id` (`product_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品sku表';
 
 
+DROP TABLE IF EXISTS `bp_order`;
+CREATE TABLE `bp_order` (
+                            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                            `order_no` varchar(128) NOT NULL DEFAULT '' COMMENT '订单编号',
+                            `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+                            `platform` tinyint(4) NOT NULL DEFAULT '0' COMMENT '平台',
+                            `order_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '订单状态',
+                            `subtotal` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品合计',
+                            `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '币种',
+                            `out_subtotal` bigint(20) NOT NULL DEFAULT '0' COMMENT '外币商品合计',
+                            `ext` text COMMENT '扩展字段',
+                            `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
+                            `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `idx_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';
+
+DROP TABLE IF EXISTS `bp_order_item`;
+CREATE TABLE `bp_order_item` (
+                            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                            `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+                            `platform` tinyint(4) NOT NULL DEFAULT '0' COMMENT '平台',
+                            `order_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '主订单id',
+                            `product_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品ID',
+                            `sku_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'SKU ID',
+                            `product_name` varchar(100) DEFAULT '' COMMENT '商品名称冗余字段',
+                            `sku_count` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品数量',
+                            `subtotal` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品合计',
+                            `real_subtotal` bigint(20) NOT NULL DEFAULT '0' COMMENT '实际子订单金额',
+                            `sub_order_status` bigint(20) DEFAULT '0' COMMENT '状态',
+                            `remark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+                            `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
+                            `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `idx_order_id` (`order_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='子订单表';
+
+DROP TABLE IF EXISTS `bp_product_snapshot`;
+CREATE TABLE `bp_product_snapshot` (
+                            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                            `order_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '主订单id',
+                            `sub_order_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '子订单id',
+                            `platform` tinyint(4) NOT NULL DEFAULT '0' COMMENT '平台',
+                            `product_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品ID',
+                            `sku_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'SKU ID',
+                            `title` varchar(128) NOT NULL DEFAULT '' COMMENT '标题',
+                            `title_en` varchar(128) NOT NULL DEFAULT '' COMMENT '标题en',
+                            `attributes` varchar(128) NOT NULL DEFAULT '' COMMENT '规格属性',
+                            `attributes_en` varchar(128) NOT NULL DEFAULT '' COMMENT '规格属性en',
+                            `price` int NOT NULL DEFAULT '0' COMMENT '价格 rmb 分',
+                            `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
+                            `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `idx_order_id` (`order_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品快照表';
