@@ -154,3 +154,16 @@ CREATE TABLE `bp_product_snapshot` (
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `idx_order_id` (`order_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品快照表';
+
+DROP TABLE IF EXISTS `bp_exchange_rate`;
+CREATE TABLE `bp_exchange_rate` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `exchange_rate` decimal(10,4) NOT NULL COMMENT '汇率',
+  `exchange_rate_type` int(3) DEFAULT '0' COMMENT '汇率类型 0 越南盾汇率 1美元汇率 ',
+  `exchange_rate_date` varchar(20) NOT NULL COMMENT '哪天的汇率',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uni_exchange_type_date` (`exchange_rate_type`,`exchange_rate_date`) USING BTREE COMMENT '汇率类型、日期唯一'
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='每天汇率记录表';
