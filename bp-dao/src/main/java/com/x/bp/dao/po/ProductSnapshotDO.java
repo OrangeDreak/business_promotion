@@ -45,7 +45,9 @@ public class ProductSnapshotDO {
 
     private String attributesEn;
 
-    private Integer price;
+    private Long price;
+
+    private Integer skuCount;
 
     private Integer isDelete;
 

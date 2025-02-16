@@ -38,9 +38,7 @@ public class OrderItemDO {
 
     private Long skuId;
 
-    private String productName;
-
-    private Long skuCount;
+    private Integer skuCount;
 
     private Long subtotal;
 

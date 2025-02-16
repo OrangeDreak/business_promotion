@@ -92,6 +92,17 @@ public class ProductService {
         return Validator.value(productSkuDOS);
     }
 
+    public List<ProductDO> listProductByProductIds(List<Long> productIds) {
+        if (CollectionUtils.isEmpty(productIds)) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<ProductDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductDO::getStatus, 1);
+        queryWrapper.eq(ProductDO::getIsDelete, 0);
+        queryWrapper.in(ProductDO::getId, productIds);
+        queryWrapper.orderByDesc(ProductDO::getId);
+        return productMapper.selectList(queryWrapper);
+    }
     public List<ProductDO> listProductByPlatform(List<Long> platformIds) {
         if (CollectionUtils.isEmpty(platformIds)) {
             return Collections.emptyList();

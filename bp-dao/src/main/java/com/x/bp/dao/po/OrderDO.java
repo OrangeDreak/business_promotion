@@ -32,7 +32,7 @@ public class OrderDO {
 
     private Long userId;
 
-    private Long platform;
+    private Integer platform;
 
     private Integer orderStatus;
 

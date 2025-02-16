@@ -10,5 +10,4 @@ import com.x.bp.dao.po.OrderItemDO;
  * @Description
  */
 public interface OrderItemMapper extends BaseMapper<OrderItemDO> {
-
 }
