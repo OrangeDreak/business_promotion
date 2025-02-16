@@ -41,8 +41,6 @@ public class AppOrderController {
         return orderService.list(req);
     }
 
-    @Resource
-    private OrderService orderService;
 
     @ApiOperation("创建订单")
     @PostMapping("/createOrder")
