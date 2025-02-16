@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/app/product")
-@Api(value = "商品管理")
+@Api(value = "C端商品管理")
 public class AppProductController {
     @Resource
     private ProductService productService;

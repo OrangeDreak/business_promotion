@@ -25,7 +25,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/admin/user")
-@Api(value = "用户管理")
+@Api(value = "后台用户管理")
 public class AdminUserController {
     @Resource
     private UserService userService;
