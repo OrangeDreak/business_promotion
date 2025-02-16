@@ -1,11 +1,23 @@
 package com.x.bp.core.repository;
 
+import com.x.bp.common.model.ServiceResultTO;
+import com.x.bp.common.utils.Validator;
+import com.x.bp.core.dto.order.CreateOrderDTO;
+import com.x.bp.core.service.product.ProductService;
 import com.x.bp.dao.mapper.ProductSnapshotMapper;
+import com.x.bp.dao.po.OrderItemDO;
+import com.x.bp.dao.po.ProductDO;
+import com.x.bp.dao.po.ProductSkuDO;
 import com.x.bp.dao.po.ProductSnapshotDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author zouzhe
@@ -19,9 +31,48 @@ public class ProductSnapshotRepository {
     @Resource
     private ProductSnapshotMapper productSnapshotMapper;
 
-    public Boolean addProductSnapshot(ProductSnapshotDO productSnapshotDO) {
-        productSnapshotMapper.insert(productSnapshotDO);
+    @Resource
+    private OrderItemRepository orderItemRepository;
 
-        return true;
+    @Resource
+    private ProductService productService;
+
+    public ServiceResultTO addProductSnapshot(Long orderId) {
+
+        List<OrderItemDO> orderItemListByOrderId = orderItemRepository.getOrderItemListByOrderId(orderId);
+        if (Validator.isNullOrEmpty(orderItemListByOrderId)) {
+            return ServiceResultTO.buildFailed("订单项不能为空");
+        }
+        List<Long> productIds = orderItemListByOrderId.stream().map(OrderItemDO::getProductId).collect(Collectors.toList());
+        List<Long> skuIds = orderItemListByOrderId.stream().map(OrderItemDO::getSkuId).collect(Collectors.toList());
+        List<ProductDO> productDOS = productService.listProductByProductIds(productIds);
+        List<ProductSkuDO> productSkuDOList = productService.listSkuBySkuIds(skuIds);
+        if (Validator.isNullOrEmpty(productDOS)) {
+            return ServiceResultTO.buildFailed("商品不能为空");
+        }
+        if (Validator.isNullOrEmpty(productSkuDOList)) {
+            return ServiceResultTO.buildFailed("商品sku不能为空");
+        }
+        Map<Long, ProductDO> productDOMap = productDOS.stream().collect(Collectors.toMap(ProductDO::getId, Function.identity(), (v1, v2) -> v1));
+        Map<Long, ProductSkuDO> skuDOMap = productSkuDOList.stream().collect(Collectors.toMap(ProductSkuDO::getId, Function.identity(), (v1, v2) -> v1));
+        orderItemListByOrderId.forEach(orderItemDO -> {
+            ProductDO productDO = productDOMap.get(orderItemDO.getProductId());
+            ProductSkuDO productSkuDO = skuDOMap.get(orderItemDO.getSkuId());
+            ProductSnapshotDO productSnapshotDO = ProductSnapshotDO.builder()
+                    .orderId(orderId)
+                    .productId(orderItemDO.getProductId())
+                    .skuId(orderItemDO.getSkuId())
+                    .skuCount(orderItemDO.getSkuCount())
+                    .price(orderItemDO.getSubtotal())
+                    .title(productDO.getTitle())
+                    .titleEn(productDO.getTitleEn())
+                    .attributesEn(productSkuDO.getAttributes())
+                    .attributesEn(productSkuDO.getAttributesEn())
+                    .gmtCreate(new Date())
+                    .build();
+            productSnapshotMapper.insert(productSnapshotDO);
+        });
+
+        return ServiceResultTO.buildSuccess(null,"商品快照表新增成功");
     }
 }
