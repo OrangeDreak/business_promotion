@@ -6,6 +6,7 @@ import com.x.bp.core.dto.user.UserRegisterReq;
 import com.x.bp.core.enums.UserStatusEnum;
 import com.x.bp.dao.po.UserDO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,8 +44,9 @@ public class UserLoginService {
         if (null != userDO) {
             if (UserStatusEnum.LOG_OFF.getCode().equals(userDO.getStatus())) {
                 userDO.setStatus(UserStatusEnum.NORMAL.getCode());
-                userDO.setFirstName(req.getFirstName());
-                userDO.setLastName(req.getLastName());
+                userDO.setFirstName(StringUtils.isNotBlank(req.getFirstName()) ? req.getFirstName() : userDO.getFirstName());
+                userDO.setLastName(StringUtils.isNotBlank(req.getLastName()) ? req.getLastName() : userDO.getLastName());
+                userDO.setNickName(userDO.getFirstName() + " " + userDO.getLastName());
                 userDO.setPassword(req.getPassword());
                 userService.updateById(userDO);
                 return;
@@ -56,6 +58,7 @@ public class UserLoginService {
         userDO.setEmail(req.getEmail());
         userDO.setFirstName(req.getFirstName());
         userDO.setLastName(req.getLastName());
+        userDO.setNickName(req.getFirstName() + " " + req.getLastName());
         userDO.setUserType(userType);
         userDO.setPassword(req.getPassword());
         userService.addUser(userDO);
