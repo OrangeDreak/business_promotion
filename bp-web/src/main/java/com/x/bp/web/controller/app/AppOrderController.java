@@ -1,5 +1,10 @@
 package com.x.bp.web.controller.app;
 
+import com.x.bp.common.model.ServicePageResult;
+import com.x.bp.common.utils.ApiContextUtil;
+import com.x.bp.core.dto.order.OrderQueryReq;
+import com.x.bp.core.service.order.OrderService;
+import com.x.bp.core.vo.order.OrderVO;
 import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.common.utils.ApiContextUtil;
 import com.x.bp.core.common.Result;
@@ -27,6 +32,14 @@ import javax.annotation.Resource;
 @RequestMapping("/app/order")
 @Api(value = "订单")
 public class AppOrderController {
+    @Resource
+    private OrderService orderService;
+    @ApiOperation(value = "订单列表")
+    @PostMapping("/myOrderList")
+    public ServicePageResult<OrderVO> myOrderList(@RequestBody @Validated OrderQueryReq req) {
+        req.setUserId(ApiContextUtil.getUserId());
+        return orderService.list(req);
+    }
 
     @Resource
     private OrderService orderService;

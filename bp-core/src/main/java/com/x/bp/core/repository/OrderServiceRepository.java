@@ -1,5 +1,8 @@
 package com.x.bp.core.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.x.bp.common.enums.OrderStatusEnum;
 import com.x.bp.common.utils.TimeUtils;
 import com.x.bp.core.dto.order.CreateOrderDTO;
@@ -40,5 +43,9 @@ public class OrderServiceRepository {
         orderDO.setGmtCreate(new Date());
         int insertResult = orderMapper.insert(orderDO);
         return insertResult > 0 ? createOrderDTO : null;
+    }
+
+    public IPage<OrderDO> selectPage(Integer page, Integer pageSize, LambdaQueryWrapper<OrderDO> queryWrapper) {
+        return orderMapper.selectPage(new Page<>(page, pageSize), queryWrapper);
     }
 }

@@ -2,6 +2,7 @@ package com.x.bp.common.utils;
 
 import com.x.bp.common.constant.NumberConstants;
 import com.x.bp.common.context.ApiContext;
+import com.x.bp.common.enums.CurrencyEnum;
 import com.x.bp.common.enums.LanguageTypeEnum;
 import com.x.bp.common.model.LoginUserTO;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,11 @@ public class ApiContextUtil {
 
     public static String getLange() {
         String lan = ApiContext.getContext().getLange();
-        return StringUtils.isBlank(lan) ? LanguageTypeEnum.EN.getEnName() : lan;
+        return StringUtils.isBlank(lan) ? LanguageTypeEnum.ZH.getEnName() : lan;
+    }
+
+    public static Integer getCurrency() {
+        String lan = getLange();
+        return LanguageTypeEnum.ZH.getEnName().equals(lan) ? CurrencyEnum.RMB.getCode() : CurrencyEnum.USD.getCode();
     }
 }

@@ -14,6 +14,7 @@ import com.x.bp.core.dto.product.ProductDTO;
 import com.x.bp.core.dto.product.ProductDetailDTO;
 import com.x.bp.core.dto.product.ProductSkuDTO;
 import com.x.bp.core.dto.user.ProductQueryReq;
+import com.x.bp.core.utils.ExchangeUtil;
 import com.x.bp.core.vo.product.ProductSkuVO;
 import com.x.bp.core.vo.product.ProductVO;
 import com.x.bp.dao.mapper.ProductMapper;
@@ -71,6 +72,7 @@ public class ProductService {
                 BeanUtils.copyProperties(product, productDTO);
                 productDTO.setPlatformName(platform.getName());
                 productDTO.setPlatformNameEn(platform.getNameEn());
+                productDTO.setPrice(ExchangeUtil.exchange(product.getPrice()));
                 platformProductDTO.getProductDTOList().add(productDTO);
             });
         });
@@ -171,6 +173,7 @@ public class ProductService {
             detailDTO.setSkuDTOList(new ArrayList<>());
             detailDTO.setPlatformName(platformDO.getName());
             detailDTO.setPlatformNameEn(platformDO.getNameEn());
+            detailDTO.setPrice(ExchangeUtil.exchange(product.getPrice()));
             resultList.add(detailDTO);
             List<ProductSkuDO> skuDOS = productSkuMap.get(product.getId());
             if (CollectionUtils.isEmpty(skuDOS)) {
@@ -180,6 +183,7 @@ public class ProductService {
             skuDOS.forEach(sku -> {
                 ProductSkuDTO skuDTO = new ProductSkuDTO();
                 BeanUtils.copyProperties(sku, skuDTO);
+                skuDTO.setPrice(ExchangeUtil.exchange(sku.getPrice()));
                 detailDTO.getSkuDTOList().add(skuDTO);
             });
         });

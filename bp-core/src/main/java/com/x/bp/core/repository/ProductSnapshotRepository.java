@@ -1,8 +1,8 @@
 package com.x.bp.core.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.common.utils.Validator;
-import com.x.bp.core.dto.order.CreateOrderDTO;
 import com.x.bp.core.service.product.ProductService;
 import com.x.bp.dao.mapper.ProductSnapshotMapper;
 import com.x.bp.dao.po.OrderItemDO;
@@ -10,9 +10,11 @@ import com.x.bp.dao.po.ProductDO;
 import com.x.bp.dao.po.ProductSkuDO;
 import com.x.bp.dao.po.ProductSnapshotDO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -74,5 +76,15 @@ public class ProductSnapshotRepository {
         });
 
         return ServiceResultTO.buildSuccess(null,"商品快照表新增成功");
+    }
+
+    public List<ProductSnapshotDO> listByOrderIds(List<Long> orderIds) {
+        if (CollectionUtils.isEmpty(orderIds)) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<ProductSnapshotDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(ProductSnapshotDO::getOrderId, orderIds);
+        lambdaQueryWrapper.eq(ProductSnapshotDO::getIsDelete, 0);
+        return productSnapshotMapper.selectList(lambdaQueryWrapper);
     }
 }

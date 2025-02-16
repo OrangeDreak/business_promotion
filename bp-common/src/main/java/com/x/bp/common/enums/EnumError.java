@@ -21,6 +21,7 @@ public enum EnumError {
     //商品
 
     PLATFORM_INVALID(7001, "无效的平台", "Invalid Platform"),// 无效的平台
+    EXCHANGE_RATE_GET_FAIL(7002, "获取汇率失败", "Exchange rate acquisition failed"),// 无效的平台
     ;
     /**
      * 值

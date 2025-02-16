@@ -46,6 +46,13 @@ public class UserService {
         return userMapper.selectById(id);
     }
 
+    public List<UserDO> listByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+        return userMapper.selectBatchIds(ids);
+    }
+
     public UserDO getUserByLoginName(String loginName, Integer userType) {
         if (StringUtils.isBlank(loginName) || UserTypeEnum.isValidType(userType)) {
             return null;
