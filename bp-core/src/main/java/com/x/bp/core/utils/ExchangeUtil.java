@@ -37,12 +37,17 @@ public class ExchangeUtil implements ApplicationContextAware {
     }
 
     public static BigDecimal exchange(Long price, Date date) {
+        Integer currency = ApiContextUtil.getCurrency();
+        return exchange(price, date, currency);
+    }
+
+    public static BigDecimal exchange(Long price, Date date, Integer currency) {
         if (!Validator.greaterZero(price)) {
             return BigDecimal.ZERO;
         }
-        Integer currency = ApiContextUtil.getCurrency();
         BigDecimal rate = exchangeService.getExchangeRate(CurrencyEnum.getByCode(currency), date);
 
         return NumberUtil.div(BigDecimal.valueOf(price), rate).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
     }
+
 }

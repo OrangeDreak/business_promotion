@@ -1,7 +1,6 @@
-package com.x.bp.web.controller.app;
+package com.x.bp.web.controller.admin;
 
 import com.x.bp.common.model.ServicePageResult;
-import com.x.bp.common.utils.ApiContextUtil;
 import com.x.bp.core.dto.order.OrderQueryReq;
 import com.x.bp.core.service.order.OrderService;
 import com.x.bp.core.vo.order.OrderVO;
@@ -16,20 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * @author zouzhe
- * @CreateDate 2025/2/15 17:24
- * @Description
+ * 订单管理
+ *
+ * @author: zhaofs
+ * @date: 2024/9/29
  */
 @RestController
-@RequestMapping("/app/order")
-@Api(value = "订单")
-public class AppOrderController {
+@RequestMapping("/admin/order")
+@Api(value = "订单管理")
+public class AdminOrderController {
     @Resource
     private OrderService orderService;
+
     @ApiOperation(value = "订单列表")
-    @PostMapping("/myOrderList")
-    public ServicePageResult<OrderVO> myOrderList(@RequestBody @Validated OrderQueryReq req) {
-        req.setUserId(ApiContextUtil.getUserId());
+    @PostMapping("/list")
+    public ServicePageResult<OrderVO> list(@RequestBody @Validated OrderQueryReq req) {
         return orderService.list(req);
     }
+
 }

@@ -26,4 +26,13 @@ public enum CurrencyEnum {
         }
         return RMB;
     }
+
+    public static CurrencyEnum getByCurrency(String currency) {
+        for (CurrencyEnum currencyEnum : values()) {
+            if (currencyEnum.getCurrency().equals(currency)) {
+                return currencyEnum;
+            }
+        }
+        return RMB;
+    }
 }
