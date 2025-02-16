@@ -54,7 +54,7 @@ public class UserService {
     }
 
     public UserDO getUserByLoginName(String loginName, Integer userType) {
-        if (StringUtils.isBlank(loginName) || UserTypeEnum.isValidType(userType)) {
+        if (StringUtils.isBlank(loginName) || !UserTypeEnum.isValidType(userType)) {
             return null;
         }
         return userMapper.getUserByLoginName(loginName, userType);
