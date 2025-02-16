@@ -30,6 +30,7 @@ public class OrderService {
         } catch (Exception e) {
 
         }
+        return ServicePageResult.buildSuccess();
     }
 
     public Boolean addOrderData(OrderDO orderDO) {
