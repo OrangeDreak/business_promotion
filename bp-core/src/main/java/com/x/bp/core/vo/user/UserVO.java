@@ -1,11 +1,9 @@
 package com.x.bp.core.vo.user;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -20,24 +18,9 @@ public class UserVO implements Serializable {
     private Long id;
 
     /**
-     * 工号
-     */
-    private String jobNo;
-
-    /**
      * 昵称
      */
     private String nickname;
-
-    /**
-     * 真实姓名
-     */
-    private String realName;
-
-    /**
-     * 密码
-     */
-    private String password;
 
     /**
      * 头像
@@ -75,34 +58,6 @@ public class UserVO implements Serializable {
     private Integer status;
 
     /**
-     * 注销原因
-     */
-    private String logoffReason;
-
-    /**
-     * 注销时间
-     */
-    private Date logoffTime;
-
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    private Integer isDelete;
-
-    /** 创建人id */
-    private Long creatorId;
-
-    /** 更新人id */
-    private Long updaterId;
-
-    /** 角色 */
-    private List<String> roleIds;
-
-    /** 角色 */
-    private List<String> roleAlias;
-
-    /**
      * 创建时间
      */
     private Date gmtCreate;
@@ -111,29 +66,4 @@ public class UserVO implements Serializable {
      * 更新时间
      */
     private Date gmtModified;
-
-    /**
-     * 角色名
-     */
-    private String roleName;
-
-    /**
-     * 部门名
-     */
-    private String deptName;
-
-    /**
-     * 岗位名
-     */
-    private String postName;
-
-    /**
-     * 性别
-     */
-    private String sexName;
-
-    /**
-     * 添加人
-     */
-    private String createUsername;
 }

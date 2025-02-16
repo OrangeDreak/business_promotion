@@ -49,7 +49,7 @@ public class ProductDO {
     /**
      * 价格
      */
-    private Integer price;
+    private Long price;
 
     /**
      * 排序

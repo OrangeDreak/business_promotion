@@ -1,11 +1,9 @@
-package com.x.bp.core.dto.product;
+package com.x.bp.core.vo.product;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
-public class ProductDTO {
+public class ProductVO {
     private Long id;
 
     /**
@@ -29,17 +27,12 @@ public class ProductDTO {
     private String image;
 
     /**
-     * 1上架；0下架
+     * 平台
      */
-    private Integer status;
-    /**
-     * 价格
-     */
-    private BigDecimal price;
-
-    private String platformName;
-
-    private String platformNameEn;
-
     private Long platform;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 }

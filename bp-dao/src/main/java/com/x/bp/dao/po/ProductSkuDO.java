@@ -60,7 +60,7 @@ public class ProductSkuDO {
     /**
      * 已售卖库存
      */
-    private Integer price;
+    private Long price;
 
     /**
      * 排序
