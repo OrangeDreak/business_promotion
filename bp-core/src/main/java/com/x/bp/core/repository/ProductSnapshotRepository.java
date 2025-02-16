@@ -1,4 +1,4 @@
-package com.x.bp.core.service.order;
+package com.x.bp.core.repository;
 
 import com.x.bp.dao.mapper.ProductSnapshotMapper;
 import com.x.bp.dao.po.ProductSnapshotDO;
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Component
-public class ProductSnapshotService {
+public class ProductSnapshotRepository {
 
     @Resource
     private ProductSnapshotMapper productSnapshotMapper;

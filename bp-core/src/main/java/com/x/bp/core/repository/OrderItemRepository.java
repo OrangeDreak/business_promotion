@@ -1,4 +1,4 @@
-package com.x.bp.core.service.order;
+package com.x.bp.core.repository;
 
 import com.x.bp.dao.mapper.OrderItemMapper;
 import com.x.bp.dao.po.OrderItemDO;
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Component
-public class OrderItemService {
+public class OrderItemRepository {
 
     @Resource
     private OrderItemMapper orderItemMapper;

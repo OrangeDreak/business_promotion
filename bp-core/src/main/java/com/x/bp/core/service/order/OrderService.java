@@ -1,8 +1,11 @@
 package com.x.bp.core.service.order;
 
 import com.x.bp.common.model.ServicePageResult;
+import com.x.bp.common.utils.OrderNoUtils;
+import com.x.bp.core.dto.order.CreateOrderReq;
 import com.x.bp.core.dto.order.OrderDetailDTO;
 import com.x.bp.core.dto.product.ProductDetailDTO;
+import com.x.bp.core.service.product.ProductService;
 import com.x.bp.dao.mapper.OrderMapper;
 import com.x.bp.dao.po.OrderDO;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +25,13 @@ public class OrderService {
     @Resource
     private OrderMapper orderMapper;
 
-    public ServicePageResult<OrderDetailDTO> createOrder() {
+    @Resource
+    private ProductService productService;
+
+    public ServicePageResult<OrderDetailDTO> createOrder(CreateOrderReq createOrderReq) {
         //生成订单号
+        String customerOrderNo = OrderNoUtils.getCustomerOrderNo();
+        productService.listSkuBySkuIds(createOrderReq.getSkuIdList());
         try {
             //添加到订单主表
 
@@ -33,8 +41,12 @@ public class OrderService {
         return ServicePageResult.buildSuccess();
     }
 
-    public Boolean addOrderData(OrderDO orderDO) {
-        orderMapper.insert(orderDO);
-        return true;
-    }
+//    private ServicePageResult<OrderDetailDTO> dataCheck(CreateOrderReq createOrderReq) {
+//
+//        OrderDO orderDO = orderMapper.selectById(userId);
+//        OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
+//        orderDetailDTO.setOrderNo(orderDO.getOrderNo());
+//        return ServicePageResult.buildSuccess(orderDetailDTO);
+//    }
+
 }

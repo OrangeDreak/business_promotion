@@ -78,6 +78,17 @@ public class ProductService {
         return ServicePageResult.buildSuccess(resultList);
     }
 
+    public List<ProductSkuDO> listSkuBySkuIds(List<Long> skuIds) {
+        if (CollectionUtils.isEmpty(skuIds)) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<ProductSkuDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(ProductSkuDO::getIsDelete, 0);
+        lambdaQueryWrapper.in(ProductSkuDO::getId, skuIds);
+        lambdaQueryWrapper.orderByDesc(ProductSkuDO::getId);
+        List<ProductSkuDO> productSkuDOS = productSkuMapper.selectList(lambdaQueryWrapper);
+        return Validator.value(productSkuDOS);
+    }
 
     public List<ProductDO> listProductByPlatform(List<Long> platformIds) {
         if (CollectionUtils.isEmpty(platformIds)) {
