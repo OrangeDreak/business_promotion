@@ -38,6 +38,18 @@ public class ProductSkuDO {
     private String attributesEn;
 
     /**
+     * 种类属性
+     */
+    private String prop;
+
+    /**
+     * 种类属性
+     */
+    private String propEn;
+
+
+
+    /**
      * 图片
      */
     private String image;

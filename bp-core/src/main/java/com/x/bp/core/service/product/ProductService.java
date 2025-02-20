@@ -127,7 +127,7 @@ public class ProductService {
             return ServicePageResult.buildSuccess();
         }
         productDOS = productDOS.stream().sorted(Comparator.comparing(ProductDO::getSort)).collect(Collectors.toList());
-        return ServicePageResult.buildSuccess(convertProductDetail(productDOS));
+        return ServicePageResult.buildSuccess(convertProductDetail(productDOS, true));
     }
 
     public List<ProductSkuDO> listSkuByProductIds(List<Long> productIds) {
@@ -155,10 +155,10 @@ public class ProductService {
             return ServicePageResult.buildSuccess(Collections.emptyList(), iPage.getTotal());
         }
         List<ProductDO> productDOS = iPage.getRecords();
-        return ServicePageResult.buildSuccess(convertProductDetail(productDOS), iPage.getTotal());
+        return ServicePageResult.buildSuccess(convertProductDetail(productDOS, false), iPage.getTotal());
     }
 
-    private List<ProductDetailDTO> convertProductDetail(List<ProductDO> productDOS) {
+    private List<ProductDetailDTO> convertProductDetail(List<ProductDO> productDOS, Boolean group) {
         List<Long> productIds = productDOS.stream().map(ProductDO::getId).collect(Collectors.toList());
         List<ProductSkuDO> skuDOList = listSkuByProductIds(productIds);
         Map<Long, List<ProductSkuDO>> productSkuMap = skuDOList.stream().collect(Collectors.groupingBy(ProductSkuDO::getProductId));
@@ -168,9 +168,10 @@ public class ProductService {
         List<ProductDetailDTO> resultList = new ArrayList<>();
         productDOS.forEach(product -> {
             PlatformDO platformDO = platformDOMap.get(product.getPlatform());
+            List<ProductSkuDTO> skuDTOList = new ArrayList<>();
             ProductDetailDTO detailDTO = new ProductDetailDTO();
             BeanUtils.copyProperties(product, detailDTO);
-            detailDTO.setSkuDTOList(new ArrayList<>());
+            detailDTO.setSkuDTOList(skuDTOList);
             detailDTO.setPlatformName(platformDO.getName());
             detailDTO.setPlatformNameEn(platformDO.getNameEn());
             detailDTO.setPrice(ExchangeUtil.exchange(product.getPrice()));
@@ -179,13 +180,39 @@ public class ProductService {
             if (CollectionUtils.isEmpty(skuDOS)) {
                 return;
             }
-            skuDOS = skuDOS.stream().sorted(Comparator.comparing(ProductSkuDO::getSort)).collect(Collectors.toList());
-            skuDOS.forEach(sku -> {
-                ProductSkuDTO skuDTO = new ProductSkuDTO();
-                BeanUtils.copyProperties(sku, skuDTO);
-                skuDTO.setPrice(ExchangeUtil.exchange(sku.getPrice()));
-                detailDTO.getSkuDTOList().add(skuDTO);
-            });
+
+            if (group) {
+                Map<String, List<ProductSkuDO>> skuDOGroups = skuDOS.stream().collect(Collectors.groupingBy(ProductSkuDO::getAttributes));
+                for (Map.Entry<String, List<ProductSkuDO>> entry : skuDOGroups.entrySet()) {
+                    List<ProductSkuDO> skuList = entry.getValue();
+                    ProductSkuDO sku = skuList.get(0);
+                    ProductSkuDTO skuDTO = new ProductSkuDTO();
+                    BeanUtils.copyProperties(sku, skuDTO);
+                    skuDTO.setPrice(ExchangeUtil.exchange(sku.getPrice()));
+                    skuDTOList.add(skuDTO);
+                    if (skuList.size() <= 1) {
+                        return;
+                    }
+                    skuDTO.setPropList(new ArrayList<>());
+                    skuList.forEach(skuDO -> {
+                        ProductSkuDTO.PropDTO propDTO = new ProductSkuDTO.PropDTO();
+                        propDTO.setProp(skuDO.getProp());
+                        propDTO.setPropEn(skuDO.getPropEn());
+                        propDTO.setSkuId(skuDO.getId());
+                        propDTO.setPrice(ExchangeUtil.exchange(skuDO.getPrice()));
+                        skuDTO.getPropList().add(propDTO);
+                    });
+                }
+            } else {
+                for (ProductSkuDO sku : skuDOS) {
+                    ProductSkuDTO skuDTO = new ProductSkuDTO();
+                    BeanUtils.copyProperties(sku, skuDTO);
+                    skuDTO.setPrice(ExchangeUtil.exchange(sku.getPrice()));
+                    skuDTOList.add(skuDTO);
+                }
+            }
+            skuDTOList = skuDTOList.stream().sorted(Comparator.comparing(ProductSkuDTO::getSort)).collect(Collectors.toList());
+            detailDTO.setSkuDTOList(skuDTOList);
         });
         return resultList;
     }

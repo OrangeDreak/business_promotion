@@ -38,6 +38,11 @@ public class ProductDO {
     private String desc;
 
     /**
+     * 描述
+     */
+    private String descEn;
+
+    /**
      * 图片
      */
     private String image;
@@ -60,6 +65,20 @@ public class ProductDO {
      * 平台
      */
     private Long platform;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTag;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTagEn;
+
+    private String propSelectText;
+
+    private String propSelectTextEn;
 
     /**
      * 是否删除

@@ -22,6 +22,11 @@ public class ProductVO {
     private String desc;
 
     /**
+     * 描述
+     */
+    private String descEn;
+
+    /**
      * 图片
      */
     private String image;
@@ -30,6 +35,20 @@ public class ProductVO {
      * 平台
      */
     private Long platform;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTag;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTagEn;
+
+    private String propSelectText;
+
+    private String propSelectTextEn;
 
     /**
      * 排序

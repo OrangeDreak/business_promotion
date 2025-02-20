@@ -47,7 +47,7 @@ public class ExchangeUtil implements ApplicationContextAware {
         }
         BigDecimal rate = exchangeService.getExchangeRate(CurrencyEnum.getByCode(currency), date);
 
-        return NumberUtil.div(BigDecimal.valueOf(price), rate).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+        return NumberUtil.mul(BigDecimal.valueOf(price), rate).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
     }
 
 }

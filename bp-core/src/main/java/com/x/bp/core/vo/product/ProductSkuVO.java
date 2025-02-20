@@ -42,4 +42,14 @@ public class ProductSkuVO {
      * 排序
      */
     private Integer sort;
+
+    /**
+     * 种类属性
+     */
+    private String prop;
+
+    /**
+     * 种类属性
+     */
+    private String propEn;
 }

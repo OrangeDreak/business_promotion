@@ -3,6 +3,7 @@ package com.x.bp.core.dto.product;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductSkuDTO {
@@ -24,6 +25,16 @@ public class ProductSkuDTO {
     private String attributesEn;
 
     /**
+     * 种类属性
+     */
+    private String prop;
+
+    /**
+     * 种类属性
+     */
+    private String propEn;
+
+    /**
      * 图片
      */
     private String image;
@@ -37,4 +48,25 @@ public class ProductSkuDTO {
      * 价格
      */
     private BigDecimal price;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
+     * 选项list
+     */
+    private List<PropDTO> propList;
+
+    @Data
+    public static class PropDTO {
+        private String prop;
+        private String propEn;
+        private Long skuId;
+        /**
+         * 价格
+         */
+        private BigDecimal price;
+    }
 }
