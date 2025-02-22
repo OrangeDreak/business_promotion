@@ -62,6 +62,8 @@ public class ProductSnapshotRepository {
             ProductSkuDO productSkuDO = skuDOMap.get(orderItemDO.getSkuId());
             ProductSnapshotDO productSnapshotDO = ProductSnapshotDO.builder()
                     .orderId(orderId)
+                    .subOrderId(orderItemDO.getId())
+                    .platform(productDO.getPlatform())
                     .productId(orderItemDO.getProductId())
                     .skuId(orderItemDO.getSkuId())
                     .skuCount(orderItemDO.getSkuCount())
