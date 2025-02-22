@@ -75,7 +75,7 @@ public class UserService {
         queryWrapper.eq(UserDO::getUserType, UserTypeEnum.CUSTOMER.getType());
         if (StringUtils.isNotBlank(req.getKeyword())) {
             queryWrapper.and(wq -> {
-                wq.like(UserDO::getNickName, req.getKeyword()).or().like(UserDO::getEmail, req.getKeyword());
+                wq.like(UserDO::getNickname, req.getKeyword()).or().like(UserDO::getEmail, req.getKeyword());
             });
         }
         queryWrapper.orderByDesc(UserDO::getId);

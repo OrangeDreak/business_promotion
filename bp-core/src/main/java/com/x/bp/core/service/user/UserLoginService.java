@@ -46,7 +46,7 @@ public class UserLoginService {
                 userDO.setStatus(UserStatusEnum.NORMAL.getCode());
                 userDO.setFirstName(StringUtils.isNotBlank(req.getFirstName()) ? req.getFirstName() : userDO.getFirstName());
                 userDO.setLastName(StringUtils.isNotBlank(req.getLastName()) ? req.getLastName() : userDO.getLastName());
-                userDO.setNickName(userDO.getFirstName() + " " + userDO.getLastName());
+                userDO.setNickname(userDO.getFirstName() + " " + userDO.getLastName());
                 userDO.setPassword(req.getPassword());
                 userService.updateById(userDO);
                 return;
@@ -58,7 +58,10 @@ public class UserLoginService {
         userDO.setEmail(req.getEmail());
         userDO.setFirstName(req.getFirstName());
         userDO.setLastName(req.getLastName());
-        userDO.setNickName(req.getFirstName() + " " + req.getLastName());
+        userDO.setNickname(req.getEmail());
+        if (StringUtils.isNotBlank(req.getFirstName()) && StringUtils.isNotBlank(req.getLastName())) {
+            userDO.setNickname(req.getFirstName() + " " + req.getLastName());
+        }
         userDO.setUserType(userType);
         userDO.setPassword(req.getPassword());
         userService.addUser(userDO);

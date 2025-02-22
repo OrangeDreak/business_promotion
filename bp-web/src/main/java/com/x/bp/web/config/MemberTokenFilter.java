@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @Component
 public class MemberTokenFilter implements Filter {
-    public static final String AIFOCUS_COOKIE = "aifocus-cookie";
+    public static final String AIFOCUS_COOKIE = "authorization";
     public static final String AIFOCUS_LANGUAGE = "language";
 
 

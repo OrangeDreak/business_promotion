@@ -192,7 +192,7 @@ public class OrderService {
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(order, orderVO);
             UserDO userDO = userDOMap.get(order.getUserId());
-            orderVO.setUserName(null != userDO ? userDO.getNickName() : "");
+            orderVO.setUserName(null != userDO ? userDO.getNickname() : "");
             PlatformDO platformDO = platformDOMap.get(order.getPlatform());
             if (null != platformDO) {
                 orderVO.setPlatformName(platformDO.getName());

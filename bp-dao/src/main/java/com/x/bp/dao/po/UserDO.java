@@ -35,7 +35,7 @@ public class UserDO {
     /**
      * 昵称
      */
-    private String nickName;
+    private String nickname;
 
     /**
      * 用户类型 0：C端用户 1：后台用户
