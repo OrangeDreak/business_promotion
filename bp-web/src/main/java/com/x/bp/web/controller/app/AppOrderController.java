@@ -46,6 +46,7 @@ public class AppOrderController {
     @PostMapping("/createOrder")
     public Result<CreateOrderDTO> createOrder(@RequestBody @Validated CreateOrderReq req) {
         req.setUserId(ApiContextUtil.getUserId());
+        req.setCurrency(ApiContextUtil.getCurrency());
         ServiceResultTO<CreateOrderDTO> createOrderResult = orderService.createOrder(req);
         if (createOrderResult.isSuccess()) {
             return Result.buildSuccess(createOrderResult.getData());

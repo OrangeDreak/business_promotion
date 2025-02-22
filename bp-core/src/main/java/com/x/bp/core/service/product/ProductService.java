@@ -127,7 +127,7 @@ public class ProductService {
             return ServicePageResult.buildSuccess();
         }
         productDOS = productDOS.stream().sorted(Comparator.comparing(ProductDO::getSort)).collect(Collectors.toList());
-        return ServicePageResult.buildSuccess(convertProductDetail(productDOS, true));
+        return ServicePageResult.buildSuccess(convertProductDetail(productDOS, false));
     }
 
     public List<ProductSkuDO> listSkuByProductIds(List<Long> productIds) {

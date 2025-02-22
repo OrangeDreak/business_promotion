@@ -12,9 +12,4 @@ public class CartSkuDTO {
     private Long skuId;
     private Integer num;
     private Long productId;
-    private String title;
-    private String titleEn;
-    private String attributes;
-    private String attributesEn;
-    private Long subtotal;
 }

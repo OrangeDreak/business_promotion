@@ -55,4 +55,6 @@ public class OrderItemVO {
      * 规格属性
      */
     private String attributesEn;
+
+
 }

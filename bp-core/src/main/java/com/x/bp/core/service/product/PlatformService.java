@@ -28,7 +28,11 @@ public class PlatformService {
         if (!Validator.greaterZero(id)) {
             return null;
         }
-        return platformMapper.getValidPlatformById(id);
+        PlatformDO platformDO = platformMapper.selectById(id);
+        if (null == platformDO || !Validator.greaterZero(platformDO.getStatus())) {
+            return null;
+        }
+        return platformDO;
     }
 
     public List<PlatformVO> listValidPlatform() {

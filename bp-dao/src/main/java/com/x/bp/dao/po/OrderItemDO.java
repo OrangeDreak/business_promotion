@@ -38,6 +38,8 @@ public class OrderItemDO {
 
     private Long skuId;
 
+    private String productName;
+
     private Integer skuCount;
 
     private Long subtotal;

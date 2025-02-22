@@ -1,8 +1,10 @@
 package com.x.bp.core.repository;
 
+import cn.hutool.db.sql.Order;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.x.bp.core.dto.cart.CartSkuDTO;
 import com.x.bp.core.dto.order.CreateOrderDTO;
+import com.x.bp.core.vo.order.OrderItemVO;
 import com.x.bp.dao.mapper.OrderItemMapper;
 import com.x.bp.dao.po.OrderItemDO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,19 +28,14 @@ public class OrderItemRepository {
     @Resource
     private OrderItemMapper orderItemMapper;
 
-    public Boolean addOrderItem(CreateOrderDTO createOrderDTO) {
-        List<CartSkuDTO> skuList = createOrderDTO.getSkuList();
-        skuList.forEach(cartSkuDTO -> {
-            OrderItemDO orderItemDO = OrderItemDO.builder()
-                    .orderId(createOrderDTO.getOrderId())
-                    .productId(cartSkuDTO.getProductId())
-                    .skuId(cartSkuDTO.getSkuId())
-                    .skuCount(cartSkuDTO.getNum())
-                    .subtotal(cartSkuDTO.getSubtotal()).build();
-            orderItemMapper.insert(orderItemDO);
+    public void addOrderItem(List<OrderItemDO> itemDOS, Long orderId) {
+        if (CollectionUtils.isEmpty(itemDOS)) {
+            return;
+        }
+        itemDOS.forEach(itemDO -> {
+            itemDO.setOrderId(orderId);
+            orderItemMapper.insert(itemDO);
         });
-
-        return true;
     }
 
     public List<OrderItemDO> getOrderItemListByOrderId(Long orderId) {
