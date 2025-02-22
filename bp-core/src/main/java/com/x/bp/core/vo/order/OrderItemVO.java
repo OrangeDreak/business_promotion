@@ -56,5 +56,13 @@ public class OrderItemVO {
      */
     private String attributesEn;
 
+    /**
+     * 种类属性
+     */
+    private String prop;
 
+    /**
+     * 种类属性
+     */
+    private String propEn;
 }

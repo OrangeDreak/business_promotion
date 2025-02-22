@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.OK)
     public ServiceResultTO<String> handleBizException(CommonBizException ex){
         log.error("catch bizException", ex);
-        return ServiceResultTO.buildFailed(ex.getMessage(), ex.getErrorCode());
+        return ServiceResultTO.buildFailed(ex.getErrorMessage(), ex.getErrorCode());
     }
 
 

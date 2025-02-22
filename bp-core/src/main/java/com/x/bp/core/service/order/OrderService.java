@@ -96,8 +96,7 @@ public class OrderService {
         if (Validator.isNullOrEmpty(productSkuDOList)) {
             throw new CommonBizException(EnumError.PARAMETER_ERROR);
         }
-        List<ProductSkuDO> skuOutOfStock = productSkuDOList.stream().filter(productSkuDO -> productSkuDO.getStock() == 0).collect(Collectors.toList());
-        Map<Long, ProductSkuDO> skuDOMap = Validator.value(skuOutOfStock).stream().collect(Collectors.toMap(ProductSkuDO::getId, Function.identity(), (v1, v2) -> v1));
+        Map<Long, ProductSkuDO> skuDOMap = productSkuDOList.stream().collect(Collectors.toMap(ProductSkuDO::getId, Function.identity(), (v1, v2) -> v1));
         List<Long> productIds = productSkuDOList.stream().map(ProductSkuDO::getProductId).collect(Collectors.toList());
         List<ProductDO> productDOS = productService.listProductByProductIds(productIds);
         Map<Long, ProductDO> productDOMap = productDOS.stream().collect(Collectors.toMap(ProductDO::getId, Function.identity()));
