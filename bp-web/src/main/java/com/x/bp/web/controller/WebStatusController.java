@@ -1,5 +1,6 @@
 package com.x.bp.web.controller;
 
+import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.core.common.Result;
 import com.x.bp.web.annotion.LoginNotRequired;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,8 @@ public class WebStatusController {
 
     @RequestMapping(value = "/webStatus", method = {RequestMethod.GET, RequestMethod.POST})
     @LoginNotRequired
-    public Result<String> webStatus() {
-        return Result.buildSuccess();
+    public ServiceResultTO<String> webStatus() {
+        return ServiceResultTO.buildSuccess();
     }
 
 }
