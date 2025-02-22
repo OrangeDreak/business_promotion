@@ -28,7 +28,7 @@ public class Result<T> implements Serializable {
     Boolean hasNext;
 
 
-    public static<T> Result<T> buildSuccess(T t, int cnt, boolean hasNext){
+    public static<T> Result<T> buildSuccess(T t, Integer cnt, Boolean hasNext){
         Result<T> result = new Result<>();
         result.code = 200;
         result.success = true;

@@ -21,7 +21,7 @@ public class ProductDTO {
     /**
      * 描述
      */
-    private String desc;
+    private String productDesc;
 
     /**
      * 描述

@@ -19,7 +19,7 @@ public class ProductVO {
     /**
      * 描述
      */
-    private String desc;
+    private String productDesc;
 
     /**
      * 描述
