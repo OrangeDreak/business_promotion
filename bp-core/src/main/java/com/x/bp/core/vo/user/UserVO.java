@@ -58,6 +58,11 @@ public class UserVO implements Serializable {
     private Integer status;
 
     /**
+     * 用户类型 0：C端用户 1：后台用户
+     */
+    private Integer userType;
+
+    /**
      * 创建时间
      */
     private Date gmtCreate;
