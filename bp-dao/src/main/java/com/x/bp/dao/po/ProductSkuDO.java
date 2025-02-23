@@ -47,7 +47,20 @@ public class ProductSkuDO {
      */
     private String propEn;
 
+    /**
+     * 服务
+     */
+    private String service;
 
+    /**
+     * 服务
+     */
+    private String serviceEn;
+
+    /**
+     * 最小购买数量
+     */
+    private Integer minNum;
 
     /**
      * 图片
