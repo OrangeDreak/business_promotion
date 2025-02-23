@@ -62,14 +62,18 @@ public class ProductSnapshotRepository {
             ProductSkuDO productSkuDO = skuDOMap.get(orderItemDO.getSkuId());
             ProductSnapshotDO productSnapshotDO = ProductSnapshotDO.builder()
                     .orderId(orderId)
+                    .subOrderId(orderItemDO.getId())
+                    .platform(productDO.getPlatform())
                     .productId(orderItemDO.getProductId())
                     .skuId(orderItemDO.getSkuId())
                     .skuCount(orderItemDO.getSkuCount())
                     .price(orderItemDO.getSubtotal())
                     .title(productDO.getTitle())
                     .titleEn(productDO.getTitleEn())
-                    .attributesEn(productSkuDO.getAttributes())
+                    .attributes(productSkuDO.getAttributes())
                     .attributesEn(productSkuDO.getAttributesEn())
+                    .prop(productSkuDO.getProp())
+                    .propEn(productSkuDO.getPropEn())
                     .gmtCreate(new Date())
                     .build();
             productSnapshotMapper.insert(productSnapshotDO);

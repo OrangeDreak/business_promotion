@@ -41,4 +41,8 @@ public class CommonBizException extends RuntimeException {
         return this.errorCode;
     }
 
+    public String getErrorMessage() {
+        return this.errorMessage;
+    }
+
 }

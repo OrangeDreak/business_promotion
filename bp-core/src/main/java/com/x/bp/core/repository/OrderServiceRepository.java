@@ -30,19 +30,8 @@ public class OrderServiceRepository {
     @Resource
     private ProductService productService;
 
-
-    public CreateOrderDTO addOrderData(CreateOrderDTO createOrderDTO) {
-
-        OrderDO orderDO = new OrderDO();
-        orderDO.setOrderNo(createOrderDTO.getOrderNo());
-        orderDO.setCurrency(createOrderDTO.getCurrency());
-        orderDO.setUserId(createOrderDTO.getUserId());
-        orderDO.setTotalAmount(createOrderDTO.getTotalAmount());
-        orderDO.setPlatform(createOrderDTO.getPlatform());
-        orderDO.setOrderStatus(OrderStatusEnum.WAIT_PAY.getStatus());
-        orderDO.setGmtCreate(new Date());
-        int insertResult = orderMapper.insert(orderDO);
-        return insertResult > 0 ? createOrderDTO : null;
+    public void insert(OrderDO orderDO) {
+        orderMapper.insert(orderDO);
     }
 
     public IPage<OrderDO> selectPage(Integer page, Integer pageSize, LambdaQueryWrapper<OrderDO> queryWrapper) {

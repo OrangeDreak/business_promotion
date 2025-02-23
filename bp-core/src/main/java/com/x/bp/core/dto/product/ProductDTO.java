@@ -21,7 +21,12 @@ public class ProductDTO {
     /**
      * 描述
      */
-    private String desc;
+    private String productDesc;
+
+    /**
+     * 描述
+     */
+    private String descEn;
 
     /**
      * 图片
@@ -42,4 +47,18 @@ public class ProductDTO {
     private String platformNameEn;
 
     private Long platform;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTag;
+
+    /**
+     * 服务标签
+     */
+    private String serviceTagEn;
+
+    private String propSelectText;
+
+    private String propSelectTextEn;
 }

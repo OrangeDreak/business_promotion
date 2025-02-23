@@ -80,7 +80,7 @@ oss:
   bucket-name: sifubuy-wms-dev
 
 logging:
-  config: classpath:log/logback-dev.xml
+  config: classpath:log/logback.xml
 
 #redis队列开关
 redis:

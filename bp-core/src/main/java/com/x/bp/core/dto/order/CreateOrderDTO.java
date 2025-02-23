@@ -1,8 +1,8 @@
 package com.x.bp.core.dto.order;
 
-import com.x.bp.core.dto.cart.CartSkuDTO;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,11 +12,7 @@ import java.util.List;
  */
 @Data
 public class CreateOrderDTO {
-    private String orderNo;
-    private Long orderId;
-    private Long userId;
-    private Long totalAmount;
-    private Integer platform;
-    private String currency;
-    private List<CartSkuDTO> skuList;
+    private List<Long> orderIdList;
+
+    private BigDecimal totalAmount;
 }

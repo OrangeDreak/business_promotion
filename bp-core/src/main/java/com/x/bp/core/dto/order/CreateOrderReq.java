@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 public class CreateOrderReq {
     private Long userId;
-    private Integer platform;
-    private String currency;
+    private Integer currency;
     private List<CartSkuDTO> skuList;
 }

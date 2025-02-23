@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.x.bp.common.constant.NumberConstants;
 import com.x.bp.common.enums.CurrencyEnum;
+import com.x.bp.common.enums.EnumError;
+import com.x.bp.common.exception.CommonBizException;
 import com.x.bp.common.model.ServicePageResult;
 import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.common.utils.OrderNoUtils;
 import com.x.bp.common.utils.Validator;
 import com.x.bp.core.dto.cart.CartSkuDTO;
+import com.x.bp.core.dto.order.CreateOrderBO;
 import com.x.bp.core.dto.order.CreateOrderReq;
 import com.x.bp.core.dto.order.CreateOrderDTO;
 import com.x.bp.core.dto.order.OrderQueryReq;
@@ -24,6 +27,7 @@ import com.x.bp.core.vo.order.OrderVO;
 import com.x.bp.dao.po.OrderDO;
 import com.x.bp.dao.po.OrderItemDO;
 import com.x.bp.dao.po.PlatformDO;
+import com.x.bp.dao.po.ProductDO;
 import com.x.bp.dao.po.ProductSkuDO;
 import com.x.bp.dao.po.ProductSnapshotDO;
 import com.x.bp.dao.po.UserDO;
@@ -36,6 +40,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -67,69 +72,89 @@ public class OrderService {
     private PlatformService platformService;
 
     public ServiceResultTO<CreateOrderDTO> createOrder(CreateOrderReq createOrderReq) {
-        ServiceResultTO<CreateOrderDTO> dataCheckResult = dataCheck(createOrderReq);
-        if (!dataCheckResult.isSuccess()) {
-            return dataCheckResult;
-        }
-        CreateOrderDTO createOrderDTO = dataCheckResult.getData();
-        try {
+        ServiceResultTO<List<CreateOrderBO>> dataCheckResult = dataCheckAndConvert(createOrderReq);
+        CreateOrderDTO createOrderDTO = new CreateOrderDTO();
+        createOrderDTO.setOrderIdList(new ArrayList<>());
+        Long totalAmount = 0L;
+        for (CreateOrderBO orderBO : dataCheckResult.getData()) {
             //添加到订单主表
-            CreateOrderDTO orderDTO = orderServiceRepository.addOrderData(createOrderDTO);
-            if (Validator.isNullOrEmpty(orderDTO)) {
-                return ServiceResultTO.buildFailed("订单创建失败");
-            }
-            createOrderDTO.setOrderId(orderDTO.getOrderId());
+            orderServiceRepository.insert(orderBO.getOrderDO());
+            createOrderDTO.getOrderIdList().add(orderBO.getOrderDO().getId());
+            totalAmount += orderBO.getOrderDO().getTotalAmount();
             //添加订单子表
-            orderItemRepository.addOrderItem(createOrderDTO);
+            orderItemRepository.addOrderItem(orderBO.getOrderItemDOS(), orderBO.getOrderDO().getId());
             //条件商品快照表
-            productSnapshotRepository.addProductSnapshot(orderDTO.getOrderId());
-
-        } catch (Exception e) {
-            log.error("订单创建失败", e);
+            productSnapshotRepository.addProductSnapshot(orderBO.getOrderDO().getId());
         }
+        createOrderDTO.setTotalAmount(ExchangeUtil.exchange(totalAmount));
         return ServiceResultTO.buildSuccess(createOrderDTO);
     }
 
-    private ServiceResultTO<CreateOrderDTO> dataCheck(CreateOrderReq createOrderReq) {
-        if (Validator.isNotId(createOrderReq.getUserId())) {
-            return ServiceResultTO.buildFailed("用户id不能为空");
-        }
+    private ServiceResultTO<List<CreateOrderBO>> dataCheckAndConvert(CreateOrderReq createOrderReq) {
         List<Long> skuIds = createOrderReq.getSkuList().stream().map(CartSkuDTO::getSkuId).collect(Collectors.toList());
         List<ProductSkuDO> productSkuDOList = productService.listSkuBySkuIds(skuIds);
         if (Validator.isNullOrEmpty(productSkuDOList)) {
-            return ServiceResultTO.buildFailed("商品sku不能为空");
+            throw new CommonBizException(EnumError.PARAMETER_ERROR);
         }
-        List<ProductSkuDO> skuOutOfStock = productSkuDOList.stream().filter(productSkuDO -> productSkuDO.getStock() == 0).collect(Collectors.toList());
-        if (Validator.isNotNullOrEmpty(skuOutOfStock)) {
-        }
-        Map<Long, ProductSkuDO> skuDOMap = skuOutOfStock.stream().collect(Collectors.toMap(ProductSkuDO::getId, Function.identity(), (v1, v2) -> v1));
-        Long totalPrice = NumberConstants.NUMBER_LONG_ZERO;
-        for (CartSkuDTO cartSkuDTO : createOrderReq.getSkuList()) {
-            ProductSkuDO productSkuDO = skuDOMap.get(cartSkuDTO.getSkuId());
-            if (productSkuDO.getStock() <= NumberConstants.NUMBER_ZERO) {
-                return ServiceResultTO.buildFailed("商品sku库存不足");
+        Map<Long, ProductSkuDO> skuDOMap = productSkuDOList.stream().collect(Collectors.toMap(ProductSkuDO::getId, Function.identity(), (v1, v2) -> v1));
+        List<Long> productIds = productSkuDOList.stream().map(ProductSkuDO::getProductId).collect(Collectors.toList());
+        List<ProductDO> productDOS = productService.listProductByProductIds(productIds);
+        Map<Long, ProductDO> productDOMap = productDOS.stream().collect(Collectors.toMap(ProductDO::getId, Function.identity()));
+        Map<Long, List<CartSkuDTO>> skuPlatformGroup = new HashMap<>();
+        createOrderReq.getSkuList().forEach(sku -> {
+            ProductSkuDO productSkuDO = skuDOMap.get(sku.getSkuId());
+            if (null == productSkuDO) {
+                throw new CommonBizException(EnumError.PRODUCT_TAKEN_DOWN);
             }
-            if (productSkuDO.getStock() < cartSkuDTO.getNum()) {
-                return ServiceResultTO.buildFailed("购买的商品数量超过了商品库存");
+            if (productSkuDO.getStock() <= sku.getNum()) {
+                throw new CommonBizException(EnumError.PRODUCT_SOLD_OUT);
             }
-            totalPrice += productSkuDO.getPrice() * cartSkuDTO.getNum();
-        }
+            ProductDO productDO = productDOMap.get(productSkuDO.getProductId());
+            if (null == productDO) {
+                throw new CommonBizException(EnumError.PRODUCT_TAKEN_DOWN);
+            }
+            List<CartSkuDTO> platformSku = skuPlatformGroup.getOrDefault(productDO.getPlatform(), new ArrayList<>());
+            platformSku.add(sku);
+            skuPlatformGroup.put(productDO.getPlatform(), platformSku);
+        });
 
-        return ServiceResultTO.buildSuccess(buildOrderCreateDTO(createOrderReq, totalPrice));
+        List<CreateOrderBO> orderBOS = new ArrayList<>();
+        for (Map.Entry<Long, List<CartSkuDTO>> entry : skuPlatformGroup.entrySet()) {
+            List<CartSkuDTO> skuDTOList = entry.getValue();
+            CreateOrderBO orderBO = new CreateOrderBO();
+            Long totalPrice = NumberConstants.NUMBER_LONG_ZERO;
+            orderBO.setOrderItemDOS(new ArrayList<>());
+            for (CartSkuDTO sku : skuDTOList) {
+                ProductSkuDO skuDO = skuDOMap.get(sku.getSkuId());
+                ProductDO productDO = productDOMap.get(skuDO.getProductId());
+                OrderItemDO orderItemDO = buildOrderItem(sku, skuDO, productDO, createOrderReq.getUserId(), entry.getKey());
+                totalPrice += orderItemDO.getSubtotal();
+                orderBO.getOrderItemDOS().add(orderItemDO);
+            }
+            OrderDO orderDO = new OrderDO();
+            orderDO.setOrderNo(OrderNoUtils.getCustomerOrderNo());
+            orderDO.setUserId(createOrderReq.getUserId());
+            orderDO.setPlatform(entry.getKey());
+            orderDO.setTotalAmount(totalPrice);
+            orderDO.setCurrency(CurrencyEnum.getByCode(createOrderReq.getCurrency()).getCurrency());
+            orderBO.setOrderDO(orderDO);
+            orderBOS.add(orderBO);
+        }
+        return ServiceResultTO.buildSuccess(orderBOS);
     }
 
-    private CreateOrderDTO buildOrderCreateDTO(CreateOrderReq createOrderReq, Long totalPrice) {
-        CreateOrderDTO orderCreateDTO = new CreateOrderDTO();
-        String customerOrderNo = OrderNoUtils.getCustomerOrderNo();
-        orderCreateDTO.setOrderNo(customerOrderNo);
-        orderCreateDTO.setUserId(createOrderReq.getUserId());
-        orderCreateDTO.setPlatform(createOrderReq.getPlatform());
-        orderCreateDTO.setCurrency(createOrderReq.getCurrency());
-        orderCreateDTO.setSkuList(createOrderReq.getSkuList());
-        orderCreateDTO.setTotalAmount(totalPrice);
-
-        return orderCreateDTO;
-
+    private OrderItemDO buildOrderItem(CartSkuDTO sku, ProductSkuDO skuDO, ProductDO productDO, Long userId, Long platform) {
+        Long subTotal = skuDO.getPrice() * sku.getNum();
+        OrderItemDO orderItemDO = new OrderItemDO();
+        orderItemDO.setUserId(userId);
+        orderItemDO.setPlatform(platform);
+        orderItemDO.setProductId(productDO.getId());
+        orderItemDO.setSkuId(skuDO.getId());
+        orderItemDO.setProductName(productDO.getTitle());
+        orderItemDO.setSkuCount(sku.getNum());
+        orderItemDO.setSubtotal(subTotal);
+        orderItemDO.setRealSubtotal(subTotal);
+        return orderItemDO;
     }
 
     public ServicePageResult<OrderVO> list(OrderQueryReq req) {
@@ -151,7 +176,7 @@ public class OrderService {
         }
         List<OrderDO> orderDOS = iPage.getRecords();
         List<Long> orderIds = orderDOS.stream().map(OrderDO::getId).collect(Collectors.toList());
-        List<Long> platformIds = orderDOS.stream().map(v -> Long.valueOf(v.getPlatform())).collect(Collectors.toList());
+        List<Long> platformIds = orderDOS.stream().map(OrderDO::getPlatform).collect(Collectors.toList());
         List<Long> userIds = orderDOS.stream().map(OrderDO::getUserId).collect(Collectors.toList());
         List<OrderItemDO> orderItemDOS = orderItemRepository.getOrderItemListByOrderIds(orderIds);
         Map<Long, List<OrderItemDO>> orderItemGroup = orderItemDOS.stream().collect(Collectors.groupingBy(OrderItemDO::getOrderId));
@@ -166,8 +191,8 @@ public class OrderService {
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(order, orderVO);
             UserDO userDO = userDOMap.get(order.getUserId());
-            orderVO.setUserName(null != userDO ? userDO.getNickName() : "");
-            PlatformDO platformDO = platformDOMap.get(order.getPlatform().longValue());
+            orderVO.setUserName(null != userDO ? userDO.getNickname() : "");
+            PlatformDO platformDO = platformDOMap.get(order.getPlatform());
             if (null != platformDO) {
                 orderVO.setPlatformName(platformDO.getName());
                 orderVO.setPlatformNameEn(platformDO.getNameEn());
@@ -184,12 +209,10 @@ public class OrderService {
                 OrderItemVO orderItemVO = new OrderItemVO();
                 BeanUtils.copyProperties(orderItem, orderItemVO);
                 ProductSnapshotDO snapshotDO = productSnapshotDOMap.get(orderItem.getId());
+                BeanUtils.copyProperties(snapshotDO, orderItemVO);
+                BeanUtils.copyProperties(orderItem, orderItemVO);
                 orderItemVO.setPrice(ExchangeUtil.exchange(snapshotDO.getPrice(), order.getGmtCreate(), currencyEnum.getCode()));
                 orderItemVO.setSubtotal(ExchangeUtil.exchange(orderItem.getSubtotal(), order.getGmtCreate(), currencyEnum.getCode()));
-                orderItemVO.setTitle(snapshotDO.getTitle());
-                orderItemVO.setTitleEn(snapshotDO.getTitleEn());
-                orderItemVO.setAttributes(snapshotDO.getAttributes());
-                orderItemVO.setAttributesEn(snapshotDO.getAttributesEn());
                 orderVO.getOrderItemVOList().add(orderItemVO);
             });
         });

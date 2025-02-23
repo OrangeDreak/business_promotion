@@ -11,7 +11,7 @@ public class OrderQueryReq extends BaseQuery {
     /**
      * 平台
      */
-    private Integer platform;
+    private Long platform;
 
     /**
      * 用户ID

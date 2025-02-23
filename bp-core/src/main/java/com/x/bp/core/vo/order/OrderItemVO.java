@@ -55,4 +55,14 @@ public class OrderItemVO {
      * 规格属性
      */
     private String attributesEn;
+
+    /**
+     * 种类属性
+     */
+    private String prop;
+
+    /**
+     * 种类属性
+     */
+    private String propEn;
 }

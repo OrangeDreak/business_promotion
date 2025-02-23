@@ -19,7 +19,7 @@ public class OrderVO {
      */
     private String userName;
 
-    private Integer platform;
+    private Long platform;
 
     /**
      * 平台名称

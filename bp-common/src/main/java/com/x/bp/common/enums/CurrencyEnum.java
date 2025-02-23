@@ -24,7 +24,7 @@ public enum CurrencyEnum {
                 return currencyEnum;
             }
         }
-        return RMB;
+        return USD;
     }
 
     public static CurrencyEnum getByCurrency(String currency) {
@@ -33,6 +33,6 @@ public enum CurrencyEnum {
                 return currencyEnum;
             }
         }
-        return RMB;
+        return USD;
     }
 }

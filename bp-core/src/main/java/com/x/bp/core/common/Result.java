@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class Result<T> implements Serializable {
     /** 状态码**/
-    int code ;
+    Integer code ;
 
     /**是否成功**/
     boolean success;
@@ -19,16 +19,16 @@ public class Result<T> implements Serializable {
     T data;
 
     /**数量"**/
-    int cnt;
+    Integer cnt;
 
     /**消息"**/
     String message;
 
     /**是否有下一页"**/
-    boolean hasNext;
+    Boolean hasNext;
 
 
-    public static<T> Result<T> buildSuccess(T t, int cnt, boolean hasNext){
+    public static<T> Result<T> buildSuccess(T t, Integer cnt, Boolean hasNext){
         Result<T> result = new Result<>();
         result.code = 200;
         result.success = true;
@@ -38,11 +38,11 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static<T> Result<T> buildSuccess(T t, int cnt){
+    public static<T> Result<T> buildSuccess(T t, Integer cnt){
         return buildSuccess(t, cnt, false);
     }
 
-    public static<T> Result<T> buildSuccess(T t, boolean hasNext){
+    public static<T> Result<T> buildSuccess(T t, Boolean hasNext){
         return buildSuccess(t, 0, hasNext);
     }
 
@@ -75,7 +75,7 @@ public class Result<T> implements Serializable {
         return buildFail(msg, 500);
     }
 
-    public static <T> Result<T> buildFail(String msg, int code) {
+    public static <T> Result<T> buildFail(String msg, Integer code) {
         Result<T> result = new Result<>();
         result.code = code;
         result.success = false;
