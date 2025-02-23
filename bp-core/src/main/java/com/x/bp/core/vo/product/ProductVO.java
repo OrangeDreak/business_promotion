@@ -2,6 +2,8 @@ package com.x.bp.core.vo.product;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductVO {
     private Long id;
@@ -54,4 +56,19 @@ public class ProductVO {
      * 排序
      */
     private Integer sort;
+
+    /**
+     * 单价
+     */
+    private BigDecimal unitPrice;
+
+    /**
+     * 单位
+     */
+    private String unit;
+
+    /**
+     * 单位
+     */
+    private String unitEn;
 }
