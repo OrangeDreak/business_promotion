@@ -3,6 +3,7 @@ package com.x.bp.core.service.message;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.x.bp.common.enums.EnumError;
 import com.x.bp.common.exception.CommonBizException;
 import com.x.bp.common.model.ServicePageResult;
 import com.x.bp.core.dto.message.MessageDTO;
@@ -27,7 +28,7 @@ public class MessageService {
 
     public void addMessage(MessageDTO dto) {
         if (StringUtils.isBlank(dto.getContent()) && StringUtils.isBlank(dto.getTitle())) {
-            throw new CommonBizException();
+            throw new CommonBizException(EnumError.PARAMETER_ERROR);
         }
         MessageDO messageDO = new MessageDO();
         BeanUtils.copyProperties(dto, messageDO);
