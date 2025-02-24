@@ -35,7 +35,7 @@ public class MemberTokenFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
         String origin = req.getHeader("Origin");
-        if (origin != null && origin.matches("https://(www\\.)?business-promo\\.com")) {
+        if (origin != null && (origin.matches("https://(www\\.)?business-promo\\.com") || origin.matches(".*localhost.*"))) {
             res.addHeader("Access-Control-Allow-Origin", origin);
         }
         res.addHeader("Access-Control-Allow-Credentials", "true");
