@@ -33,7 +33,7 @@ public class MemberTokenFilter implements Filter {
             return;
         }
         HttpServletResponse res = (HttpServletResponse) response;
-        res.addHeader("Access-Control-Allow-Origin", "*");
+        res.addHeader("Access-Control-Allow-Origin", "https://www.business-promo.com");
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Methods", "*");
         res.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Expose-Headers," + AIFOCUS_COOKIE);
