@@ -28,7 +28,8 @@ public class ApiContextUtil {
     }
 
     public static Integer getCurrency() {
-        String lan = getLange();
-        return LanguageTypeEnum.ZH.getEnName().equals(lan) ? CurrencyEnum.RMB.getCode() : CurrencyEnum.USD.getCode();
+        return CurrencyEnum.USD.getCode();
+        //String lan = getLange();
+        //return LanguageTypeEnum.ZH.getEnName().equals(lan) ? CurrencyEnum.RMB.getCode() : CurrencyEnum.USD.getCode();
     }
 }
