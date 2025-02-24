@@ -33,10 +33,15 @@ public class MemberTokenFilter implements Filter {
             return;
         }
         HttpServletResponse res = (HttpServletResponse) response;
-        res.addHeader("Access-Control-Allow-Origin", "*");
+        HttpServletRequest req = (HttpServletRequest) request;
+        String origin = req.getHeader("Origin");
+        if (origin != null && origin.matches("https://(www\\.)?business-promo\\.com")) {
+            res.addHeader("Access-Control-Allow-Origin", origin);
+        }
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Methods", "*");
-        res.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Expose-Headers," + AIFOCUS_COOKIE);
+//        res.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Expose-Headers," + AIFOCUS_COOKIE);
+        res.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Language");
         res.addHeader("Access-Control-Expose-Headers", "*");
         res.addHeader("Access-Control-Max-Age", "1800");//30 min
         if ("OPTIONS".equals(((HttpServletRequest) request).getMethod())) {
