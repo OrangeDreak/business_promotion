@@ -57,6 +57,21 @@ public class ProductDO {
     private Long price;
 
     /**
+     * 单价
+     */
+    private Long unitPrice;
+
+    /**
+     * 单位
+     */
+    private String unit;
+
+    /**
+     * 单位
+     */
+    private String unitEn;
+
+    /**
      * 排序
      */
     private Integer sort;

@@ -1,18 +1,13 @@
 package com.x.bp.web.controller.app;
 
 import com.x.bp.common.model.ServicePageResult;
+import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.common.utils.ApiContextUtil;
+import com.x.bp.core.dto.order.CreateOrderDTO;
+import com.x.bp.core.dto.order.CreateOrderReq;
 import com.x.bp.core.dto.order.OrderQueryReq;
 import com.x.bp.core.service.order.OrderService;
 import com.x.bp.core.vo.order.OrderVO;
-import com.x.bp.common.model.ServiceResultTO;
-import com.x.bp.common.utils.ApiContextUtil;
-import com.x.bp.core.common.Result;
-import com.x.bp.core.dto.order.CreateOrderDTO;
-import com.x.bp.core.dto.order.CreateOrderReq;
-import com.x.bp.core.dto.user.UserLoginReq;
-import com.x.bp.core.service.order.OrderService;
-import com.x.bp.web.annotion.LoginNotRequired;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -44,13 +39,9 @@ public class AppOrderController {
 
     @ApiOperation("创建订单")
     @PostMapping("/createOrder")
-    public Result<CreateOrderDTO> createOrder(@RequestBody @Validated CreateOrderReq req) {
+    public ServiceResultTO<CreateOrderDTO> createOrder(@RequestBody @Validated CreateOrderReq req) {
         req.setUserId(ApiContextUtil.getUserId());
         req.setCurrency(ApiContextUtil.getCurrency());
-        ServiceResultTO<CreateOrderDTO> createOrderResult = orderService.createOrder(req);
-        if (createOrderResult.isSuccess()) {
-            return Result.buildSuccess(createOrderResult.getData());
-        }
-        return Result.buildFail(createOrderResult.getMessage());
+        return orderService.createOrder(req);
     }
 }

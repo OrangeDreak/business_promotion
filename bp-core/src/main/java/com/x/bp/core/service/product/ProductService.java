@@ -73,6 +73,7 @@ public class ProductService {
                 productDTO.setPlatformName(platform.getName());
                 productDTO.setPlatformNameEn(platform.getNameEn());
                 productDTO.setPrice(ExchangeUtil.exchange(product.getPrice()));
+                productDTO.setUnitPrice(ExchangeUtil.exchange(product.getUnitPrice(), 10000L));
                 platformProductDTO.getProductDTOList().add(productDTO);
             });
         });
@@ -175,6 +176,7 @@ public class ProductService {
             detailDTO.setPlatformName(platformDO.getName());
             detailDTO.setPlatformNameEn(platformDO.getNameEn());
             detailDTO.setPrice(ExchangeUtil.exchange(product.getPrice()));
+            detailDTO.setUnitPrice(ExchangeUtil.exchange(product.getUnitPrice(), 10000L));
             resultList.add(detailDTO);
             List<ProductSkuDO> skuDOS = productSkuMap.get(product.getId());
             if (CollectionUtils.isEmpty(skuDOS)) {

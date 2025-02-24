@@ -36,18 +36,31 @@ public class ExchangeUtil implements ApplicationContextAware {
         return exchange(price, new Date());
     }
 
+    public static BigDecimal exchange(Long price, Long divisor) {
+        return exchange(price, new Date(), divisor);
+    }
+
     public static BigDecimal exchange(Long price, Date date) {
         Integer currency = ApiContextUtil.getCurrency();
         return exchange(price, date, currency);
     }
 
+    public static BigDecimal exchange(Long price, Date date, Long divisor) {
+        Integer currency = ApiContextUtil.getCurrency();
+        return exchange(price, date, currency, divisor);
+    }
+
     public static BigDecimal exchange(Long price, Date date, Integer currency) {
+        return exchange(price, date, currency, 100L);
+    }
+
+    public static BigDecimal exchange(Long price, Date date, Integer currency, Long divisor) {
         if (!Validator.greaterZero(price)) {
             return BigDecimal.ZERO;
         }
         BigDecimal rate = exchangeService.getExchangeRate(CurrencyEnum.getByCode(currency), date);
 
-        return NumberUtil.mul(BigDecimal.valueOf(price), rate).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+        int scale = divisor > 100 ? 3 : 2;
+        return NumberUtil.mul(BigDecimal.valueOf(price), rate).divide(new BigDecimal(divisor), scale, RoundingMode.HALF_UP);
     }
-
 }

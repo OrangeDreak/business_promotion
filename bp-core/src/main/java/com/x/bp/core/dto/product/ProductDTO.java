@@ -42,6 +42,21 @@ public class ProductDTO {
      */
     private BigDecimal price;
 
+    /**
+     * 单价
+     */
+    private BigDecimal unitPrice;
+
+    /**
+     * 单位
+     */
+    private String unit;
+
+    /**
+     * 单位
+     */
+    private String unitEn;
+
     private String platformName;
 
     private String platformNameEn;

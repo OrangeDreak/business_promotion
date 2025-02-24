@@ -53,6 +53,20 @@ public class ProductSkuDTO {
      * 排序
      */
     private Integer sort;
+    /**
+     * 服务
+     */
+    private String service;
+
+    /**
+     * 服务
+     */
+    private String serviceEn;
+
+    /**
+     * 最小购买数量
+     */
+    private Integer minNum;
 
     /**
      * 选项list
