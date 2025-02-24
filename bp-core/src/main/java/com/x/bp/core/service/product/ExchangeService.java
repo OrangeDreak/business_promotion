@@ -30,7 +30,7 @@ public class ExchangeService {
     }
 
     public BigDecimal getExchangeRate(CurrencyEnum currencyEnum, Date date){
-        if(currencyEnum.equals(CurrencyEnum.USD)){
+        if(currencyEnum.getCode().equals(CurrencyEnum.USD.getCode())){
             return BigDecimal.ONE;
         }
         ExchangeRateDO exchangeRateDO = getCurrencyRate(currencyEnum.getCode(), date);
