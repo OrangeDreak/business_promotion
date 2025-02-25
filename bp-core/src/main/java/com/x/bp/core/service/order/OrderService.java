@@ -167,6 +167,7 @@ public class OrderService {
         queryWrapper.eq(StringUtils.isNotBlank(req.getOrderNo()), OrderDO::getOrderNo, req.getOrderNo());
         queryWrapper.ge(null != req.getStartGmtCreateTime(), OrderDO::getGmtCreate, req.getStartGmtCreateTime());
         queryWrapper.le(null != req.getEndGmtCreateTime(), OrderDO::getGmtCreate, req.getEndGmtCreateTime());
+        queryWrapper.orderByDesc(OrderDO::getId);
         IPage<OrderDO> iPage = orderServiceRepository.selectPage(req.getPageNo(), req.getPageSize(), queryWrapper);
         if (null == iPage) {
             return ServicePageResult.buildSuccess(Collections.emptyList(), 0);
