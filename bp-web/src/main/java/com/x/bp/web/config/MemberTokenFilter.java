@@ -36,11 +36,9 @@ public class MemberTokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String origin = req.getHeader("Origin");
         res.addHeader("Access-Control-Allow-Origin", "*");
-        if (origin != null && origin.matches("https://(www\\.)?business-promo\\.com")) {
-            res.addHeader("Access-Control-Allow-Origin", origin);
-        }
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Methods", "*");
+        res.addHeader("Access-Control-Allow-Headers", "client_id, Authorization, Language, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 //        res.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Expose-Headers," + AIFOCUS_COOKIE);
         res.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Language");
         res.addHeader("Access-Control-Expose-Headers", "*");
