@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.x.bp.common.enums.EnumError;
+import com.x.bp.common.enums.EnumTextTrans;
 import com.x.bp.common.exception.CommonBizException;
 import com.x.bp.common.model.ServicePageResult;
 import com.x.bp.core.dto.message.MessageDTO;
 import com.x.bp.core.dto.message.MessagePageReq;
+import com.x.bp.core.utils.EmailUtil;
 import com.x.bp.dao.mapper.MessageMapper;
 import com.x.bp.dao.po.MessageDO;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ import java.util.List;
 public class MessageService {
     @Resource
     private MessageMapper messageMapper;
+    @Resource
+    private EmailUtil emailUtil;
 
     public void addMessage(MessageDTO dto) {
         if (StringUtils.isBlank(dto.getContent()) && StringUtils.isBlank(dto.getTitle())) {
@@ -33,6 +37,8 @@ public class MessageService {
         MessageDO messageDO = new MessageDO();
         BeanUtils.copyProperties(dto, messageDO);
         messageMapper.insert(messageDO);
+        emailUtil.sendText2OfficialNoThrows(EnumTextTrans.USER_PRIVATE_MESSAGE, dto.getName(), dto.getEmail(), dto.getTitle(), dto.getContent());
+
     }
 
     public ServicePageResult<MessageDTO> list(MessagePageReq req) {

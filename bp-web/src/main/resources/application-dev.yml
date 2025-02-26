@@ -31,11 +31,13 @@ spring:
     password: bptestuser123@
   #邮箱配置
   mail:
-    host: smtp.qiye.aliyun.com
+    host: smtp.exmail.qq.com
     port: 465
-    username: no-reply@sifubuy.com
-    password: xportcn@0730
-    personal: Sifubuy
+    username: no-reply@business-promo.com
+    password: LATNm8aWzN938p7m
+    personal: BusinessPromotion
+    official: support@business-promo.com
+    #official: 1558000617@qq.com
 
 # 系统设置
 system:
