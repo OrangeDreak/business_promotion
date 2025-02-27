@@ -33,9 +33,7 @@ public class AdminLoginController {
     @PostMapping("/login")
     @LoginNotRequired
     public Result<UserLoginVO> login(@RequestBody @Validated UserLoginReq req) {
-        String token = userLoginService.login(req.getLoginName(), req.getPassword(), UserTypeEnum.ADMINISTRATOR.getType());
-        UserLoginVO userLoginVO = new UserLoginVO();
-        userLoginVO.setToken(token);
+        UserLoginVO userLoginVO = userLoginService.login(req.getLoginName(), req.getPassword(), UserTypeEnum.ADMINISTRATOR.getType());
         return Result.buildSuccess(userLoginVO);
     }
 }
