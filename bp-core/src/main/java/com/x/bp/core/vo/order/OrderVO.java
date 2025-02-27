@@ -19,6 +19,8 @@ public class OrderVO {
      */
     private String userName;
 
+    private String userEmail;
+
     private Long platform;
 
     /**
