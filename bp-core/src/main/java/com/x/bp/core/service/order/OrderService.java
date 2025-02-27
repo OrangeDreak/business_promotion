@@ -15,6 +15,7 @@ import com.x.bp.core.dto.order.CreateOrderBO;
 import com.x.bp.core.dto.order.CreateOrderReq;
 import com.x.bp.core.dto.order.CreateOrderDTO;
 import com.x.bp.core.dto.order.OrderQueryReq;
+import com.x.bp.core.dto.order.OrderStatusUpdateReq;
 import com.x.bp.core.repository.OrderItemRepository;
 import com.x.bp.core.repository.OrderServiceRepository;
 import com.x.bp.core.repository.ProductSnapshotRepository;
@@ -173,6 +174,14 @@ public class OrderService {
         queryWrapper.ge(null != req.getStartGmtCreateTime(), OrderDO::getGmtCreate, req.getStartGmtCreateTime());
         queryWrapper.le(null != req.getEndGmtCreateTime(), OrderDO::getGmtCreate, req.getEndGmtCreateTime());
         queryWrapper.orderByDesc(OrderDO::getId);
+        if (StringUtils.isNotBlank(req.getUserKey())) {
+            UserDO userDO = userService.getUserByLoginName(req.getUserKey(), 1);
+            if (null == userDO) {
+                return ServicePageResult.buildSuccess(Collections.emptyList(), 0);
+            }
+            queryWrapper.eq(OrderDO::getUserId, userDO.getId());
+        }
+
         IPage<OrderDO> iPage = orderServiceRepository.selectPage(req.getPageNo(), req.getPageSize(), queryWrapper);
         if (null == iPage) {
             return ServicePageResult.buildSuccess(Collections.emptyList(), 0);
@@ -223,6 +232,15 @@ public class OrderService {
             });
         });
         return ServicePageResult.buildSuccess(orderVOS, iPage.getTotal());
+    }
+
+    public void updateStatus(OrderStatusUpdateReq req) {
+        OrderDO orderDO = orderServiceRepository.getById(req.getId());
+        if (null == orderDO) {
+            throw new CommonBizException("订单不存在");
+        }
+        orderDO.setOrderStatus(req.getStatus());
+        orderServiceRepository.updateById(orderDO);
     }
 }
 

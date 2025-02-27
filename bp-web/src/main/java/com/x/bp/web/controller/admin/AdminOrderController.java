@@ -1,7 +1,9 @@
 package com.x.bp.web.controller.admin;
 
 import com.x.bp.common.model.ServicePageResult;
+import com.x.bp.common.model.ServiceResultTO;
 import com.x.bp.core.dto.order.OrderQueryReq;
+import com.x.bp.core.dto.order.OrderStatusUpdateReq;
 import com.x.bp.core.service.order.OrderService;
 import com.x.bp.core.vo.order.OrderVO;
 import io.swagger.annotations.Api;
@@ -33,4 +35,10 @@ public class AdminOrderController {
         return orderService.list(req);
     }
 
+    @ApiOperation("修改订单状态")
+    @PostMapping("/updateStatus")
+    public ServiceResultTO<Boolean> updateStatus(@RequestBody @Validated OrderStatusUpdateReq req) {
+        orderService.updateStatus(req);
+        return ServiceResultTO.buildSuccess(true);
+    }
 }

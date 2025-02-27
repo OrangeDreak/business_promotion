@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.x.bp.common.enums.OrderStatusEnum;
 import com.x.bp.common.utils.TimeUtils;
+import com.x.bp.common.utils.Validator;
 import com.x.bp.core.dto.order.CreateOrderDTO;
 import com.x.bp.core.service.product.ProductService;
 import com.x.bp.dao.mapper.OrderMapper;
@@ -36,5 +37,15 @@ public class OrderServiceRepository {
 
     public IPage<OrderDO> selectPage(Integer page, Integer pageSize, LambdaQueryWrapper<OrderDO> queryWrapper) {
         return orderMapper.selectPage(new Page<>(page, pageSize), queryWrapper);
+    }
+    public OrderDO getById(Long id) {
+        if (!Validator.greaterZero(id)) {
+            return null;
+        }
+        return orderMapper.selectById(id);
+    }
+
+    public void updateById(OrderDO orderDO) {
+        orderMapper.updateById(orderDO);
     }
 }

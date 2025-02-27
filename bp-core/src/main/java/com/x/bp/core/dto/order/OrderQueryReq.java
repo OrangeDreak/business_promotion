@@ -40,4 +40,6 @@ public class OrderQueryReq extends BaseQuery {
      * 创建时间-结束
      */
     private Date endGmtCreateTime;
+
+    private String userKey;
 }
