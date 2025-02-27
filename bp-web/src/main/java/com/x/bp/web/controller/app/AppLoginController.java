@@ -34,9 +34,7 @@ public class AppLoginController {
     @PostMapping("/login")
     @LoginNotRequired
     public Result<UserLoginVO> login(@RequestBody @Validated UserLoginReq req) {
-        String token = userLoginService.login(req.getLoginName(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
-        UserLoginVO userLoginVO = new UserLoginVO();
-        userLoginVO.setToken(token);
+        UserLoginVO userLoginVO = userLoginService.login(req.getLoginName(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
         return Result.buildSuccess(userLoginVO);
     }
 
@@ -46,9 +44,7 @@ public class AppLoginController {
     public Result<UserLoginVO> register(@RequestBody @Validated UserRegisterReq req) {
         userLoginService.register(req, UserTypeEnum.CUSTOMER.getType());
         //注册成功直接登录
-        String token = userLoginService.login(req.getEmail(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
-        UserLoginVO userLoginVO = new UserLoginVO();
-        userLoginVO.setToken(token);
+        UserLoginVO userLoginVO = userLoginService.login(req.getEmail(), req.getPassword(), UserTypeEnum.CUSTOMER.getType());
         return Result.buildSuccess(userLoginVO);
     }
 }

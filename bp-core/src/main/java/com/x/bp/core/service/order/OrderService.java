@@ -87,7 +87,12 @@ public class OrderService {
             productSnapshotRepository.addProductSnapshot(orderBO.getOrderDO().getId());
         }
         createOrderDTO.setTotalAmount(ExchangeUtil.exchange(totalAmount));
+        sendOrderEmail(createOrderDTO.getOrderIdList());
         return ServiceResultTO.buildSuccess(createOrderDTO);
+    }
+
+    private void sendOrderEmail(List<Long> orderIds) {
+
     }
 
     private ServiceResultTO<List<CreateOrderBO>> dataCheckAndConvert(CreateOrderReq createOrderReq) {

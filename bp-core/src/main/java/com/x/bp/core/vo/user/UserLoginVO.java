@@ -14,4 +14,5 @@ public class UserLoginVO {
      */
     private String token;
 
+    private Integer userType;
 }
