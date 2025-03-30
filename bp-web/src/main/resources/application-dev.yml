@@ -26,7 +26,7 @@ spring:
     #  commandTimeout: 5000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-t4nw3281hopn4065bpo.mysql.singapore.rds.aliyuncs.com:3306/bp-dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://rm-t4nw3281hopn4065bpo.mysql.singapore.rds.aliyuncs.com:3306/bp-dev_backup?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: bptestuser
     password: bptestuser123@
   #邮箱配置
